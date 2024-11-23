@@ -55,6 +55,6 @@ public class TopicoController {
     public ResponseEntity actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
         Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id());
         topico.actualizarDatos(datosActualizarTopico);
-        return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(),topico.getTitulo(), topico.getMensaje());
+        return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(),topico.getTitulo(), topico.getMensaje(),topico.getFechaCreacion()));
     }
 }
