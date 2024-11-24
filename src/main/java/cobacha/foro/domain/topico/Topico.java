@@ -25,6 +25,8 @@ public class Topico {
 
     private String mensaje;
 
+    private String autor;
+
     private LocalDateTime fechaCreacion = LocalDateTime.now(); // Se asigna la fecha actual por defecto
 
     /*
@@ -39,6 +41,7 @@ public class Topico {
     public Topico(@Valid DatosRegistroTopico datosRegistroTopico) {
         this.titulo = datosRegistroTopico.titulo();
         this.mensaje = datosRegistroTopico.mensaje();
+        this.autor=datosRegistroTopico.autor();
     }
     public void actualizarDatos(DatosActualizarTopico datosActualizarTopico){
         if (datosActualizarTopico.titulo() != null) {

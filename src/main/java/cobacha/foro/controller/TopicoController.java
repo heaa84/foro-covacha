@@ -1,4 +1,5 @@
 package cobacha.foro.controller;
+
 import cobacha.foro.domain.topico.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -19,23 +20,25 @@ public class TopicoController {
     @Autowired
     private TopicoRepository topicoRepository;
 
-    // Registrar topico
+    // Registrar tópico
     @PostMapping
-    public ResponseEntity <DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
+    public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
                                                                 UriComponentsBuilder uriComponentsBuilder) {
+        // Verificar si ya existe un tópico con el mismo título y mensaje
+        if (topicoRepository.existsByTituloAndMensaje(datosRegistroTopico.titulo(), datosRegistroTopico.mensaje())) {
+            return ResponseEntity.badRequest().body(new DatosRespuestaTopico("Ya existe un tópico con el mismo título y mensaje"));
+        }
+
         // Guardar el nuevo tópico
         Topico topico = topicoRepository.save(new Topico(datosRegistroTopico));
 
-        // Crear el objeto de respuesta como un record
+        // Crear el objeto de respuesta
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(
                 topico.getId(),
+                topico.getAutor(),
                 topico.getTitulo(),
-                topico.getMensaje(), // Ahora devuelve el mensaje del tópico
+                topico.getMensaje(),
                 topico.getFechaCreacion()
-                //topico.getStatus().toString() // Devolver el estado como String
-                /*
-                topico.getAutor().getNombre(), // Suponiendo que el autor es una relación con un objeto "Autor"
-                */
         );
 
         // Construir la URI para el recurso recién creado
@@ -44,17 +47,19 @@ public class TopicoController {
         // Devolver la respuesta con estado CREATED
         return ResponseEntity.created(url).body(datosRespuestaTopico);
     }
-    // Listar todos los topicos
+
+    // Listar todos los tópicos
     @GetMapping
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 2) Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
-    // Actualizar topico
+
+    // Actualizar tópico
     @PutMapping
     @Transactional
     public ResponseEntity actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
         Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id());
         topico.actualizarDatos(datosActualizarTopico);
-        return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(),topico.getTitulo(), topico.getMensaje(),topico.getFechaCreacion()));
+        return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(), topico.getAutor(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion()));
     }
 }
