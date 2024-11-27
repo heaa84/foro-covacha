@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Table(name = "cursos")
 @Entity(name = "Curso")
 @Getter
@@ -24,6 +25,18 @@ public class Curso {
     private String categoria;
 
     @ManyToOne
-    @JoinColumn(name = "topico_id", nullable = false)
-    private Topico topico; // Relación con Topico
+    @JoinColumn(name = "topico_id") // Asegúrate de que este nombre de columna coincida con tu esquema de base de datos
+    private Topico topico;
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setTopico(Topico topico) {
+        this.topico = topico;
+    }
 }

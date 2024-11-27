@@ -1,5 +1,7 @@
 package cobacha.foro.domain.topico;
 
+import cobacha.foro.domain.curso.Curso;
+
 import java.time.LocalDateTime;
 
 public record DatosRespuestaTopico(
@@ -7,8 +9,7 @@ public record DatosRespuestaTopico(
         String titulo,
         String mensaje,
         LocalDateTime fechaCreacion,
-        String estado,
-        String autor,
-        String curso
-) {
+        TopicoStatus estado,
+        String autor
+        ) {
 }

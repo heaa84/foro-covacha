@@ -1,5 +1,8 @@
 package cobacha.foro.controller;
 
+import cobacha.foro.domain.curso.Curso;
+import cobacha.foro.domain.curso.CursoRepository;
+import cobacha.foro.domain.curso.DatosRepuestaCurso;
 import cobacha.foro.domain.topico.*;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 import jakarta.transaction.Transactional;
@@ -20,26 +23,38 @@ public class TopicoController {
 
     @Autowired
     private TopicoRepository topicoRepository;
+    @Autowired
+    private CursoRepository cursoRepository;
 
-    // Registrar tópico
     @PostMapping
-    public ResponseEntity registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
-                                                                UriComponentsBuilder uriComponentsBuilder) {
+    @Transactional
+    public ResponseEntity registrarTopicoConCurso(
+            @RequestBody @Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso,
+            UriComponentsBuilder uriComponentsBuilder) {
+
         // Verificar si ya existe un tópico con el mismo título y mensaje
-        if (topicoRepository.existsByTituloAndMensaje(datosRegistroTopico.titulo(), datosRegistroTopico.mensaje())) {
+        if (topicoRepository.existsByTituloAndMensaje(datosRegistroTopicoConCurso.titulo(), datosRegistroTopicoConCurso.mensaje())) {
             TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe un tópico con el mismo título y mensaje");
             return ResponseEntity.badRequest().body(errorResponse);
         }
-        // Guardar el nuevo tópico
-        Topico topico = topicoRepository.save(new Topico(datosRegistroTopico));
+
+        // Crear el tópico y asociarlo al curso
+        Topico topico = new Topico(datosRegistroTopicoConCurso);
+        // Crear el objeto de respuesta para el curso
+
+
+        // Guardar el tópico
+        topicoRepository.save(topico);
+
 
         // Crear el objeto de respuesta
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(
                 topico.getId(),
-                topico.getAutor(),
                 topico.getTitulo(),
                 topico.getMensaje(),
-                topico.getFechaCreacion()
+                topico.getFechaCreacion(),
+                topico.getStatus(),
+                topico.getAutor()
         );
 
         // Construir la URI para el recurso recién creado
@@ -48,6 +63,8 @@ public class TopicoController {
         // Devolver la respuesta con estado CREATED
         return ResponseEntity.created(url).body(datosRespuestaTopico);
     }
+
+/*
 
     // Listar todos los tópicos
     @GetMapping
@@ -63,4 +80,5 @@ public class TopicoController {
         topico.actualizarDatos(datosActualizarTopico);
         return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(), topico.getAutor(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion()));
     }
+    */
 }

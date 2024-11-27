@@ -1,5 +1,6 @@
 package cobacha.foro.domain.topico;
 
+import cobacha.foro.domain.curso.Curso;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "topicos")
 @Entity(name = "Topico")
@@ -35,12 +37,21 @@ public class Topico {
     @Enumerated(EnumType.STRING)
     private TopicoStatus status;
 
+    // Relación muchos a uno: un tópico pertenece a un curso
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List <Curso> curso;
+
     // Constructor para inicializar usando un objeto de tipo DatosRegistroTopico
-    public Topico(@Valid DatosRegistroTopico datosRegistroTopico) {
-        this.titulo = datosRegistroTopico.titulo();
-        this.mensaje = datosRegistroTopico.mensaje();
-        this.autor=datosRegistroTopico.autor();
+    public Topico(@Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso) {
+        this.titulo = datosRegistroTopicoConCurso.titulo();
+        this.mensaje = datosRegistroTopicoConCurso.mensaje();
+        this.autor=datosRegistroTopicoConCurso.autor();
         this.status= TopicoStatus.ACTIVO;
+        Curso curso=new Curso();
+        curso.setNombre(datosRegistroTopicoConCurso.nombreCurso());
+        curso.setCategoria(datosRegistroTopicoConCurso.categoriaCurso());
+        curso.setTopico(this);
+        this.curso=List.of(curso);
     }
     public void actualizarDatos(DatosActualizarTopico datosActualizarTopico){
         if (datosActualizarTopico.titulo() != null) {
