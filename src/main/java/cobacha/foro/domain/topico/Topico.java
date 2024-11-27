@@ -53,6 +53,11 @@ public class Topico {
         curso.setTopico(this);
         this.curso=List.of(curso);
     }
+
+    public List<Curso> getCurso() {
+        return curso;
+    }
+
     public void actualizarDatos(DatosActualizarTopico datosActualizarTopico){
         if (datosActualizarTopico.titulo() != null) {
             this.titulo = datosActualizarTopico.titulo();

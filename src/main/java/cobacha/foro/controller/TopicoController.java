@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/topico")
@@ -40,12 +42,13 @@ public class TopicoController {
 
         // Crear el tópico y asociarlo al curso
         Topico topico = new Topico(datosRegistroTopicoConCurso);
-        // Crear el objeto de respuesta para el curso
-
 
         // Guardar el tópico
         topicoRepository.save(topico);
 
+        List<DatosRepuestaCurso> cursosRespuesta = topico.getCurso().stream()
+                .map(curso -> new DatosRepuestaCurso(curso.getNombre(), curso.getCategoria()))
+                .collect(Collectors.toList());
 
         // Crear el objeto de respuesta
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(
@@ -54,7 +57,8 @@ public class TopicoController {
                 topico.getMensaje(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
-                topico.getAutor()
+                topico.getAutor(),
+                cursosRespuesta
         );
 
         // Construir la URI para el recurso recién creado
@@ -64,14 +68,14 @@ public class TopicoController {
         return ResponseEntity.created(url).body(datosRespuestaTopico);
     }
 
-/*
+
 
     // Listar todos los tópicos
     @GetMapping
-    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 2) Pageable paginacion) {
+    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10) Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
-
+/*
     // Actualizar tópico
     @PutMapping
     @Transactional
