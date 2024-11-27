@@ -1,6 +1,7 @@
 package cobacha.foro.controller;
 
 import cobacha.foro.domain.topico.*;
+import cobacha.foro.infra.errores.TratadorDeErrores;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,13 @@ public class TopicoController {
 
     // Registrar tópico
     @PostMapping
-    public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
+    public ResponseEntity registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
                                                                 UriComponentsBuilder uriComponentsBuilder) {
         // Verificar si ya existe un tópico con el mismo título y mensaje
         if (topicoRepository.existsByTituloAndMensaje(datosRegistroTopico.titulo(), datosRegistroTopico.mensaje())) {
-            return ResponseEntity.badRequest().body(new DatosRespuestaTopico("Ya existe un tópico con el mismo título y mensaje"));
+            TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe un tópico con el mismo título y mensaje");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
-
         // Guardar el nuevo tópico
         Topico topico = topicoRepository.save(new Topico(datosRegistroTopico));
 
