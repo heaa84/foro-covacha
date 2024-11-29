@@ -9,11 +9,12 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Table(name = "topicos")
 @Entity(name = "Topico")
 @Getter
@@ -69,5 +70,6 @@ public class Topico {
         if (datosActualizarTopico.autor() != null) {
             this.autor = datosActualizarTopico.autor();
         }
+
     }
 }

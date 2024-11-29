@@ -1,5 +1,6 @@
 package cobacha.foro.controller;
 
+import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
 import cobacha.foro.domain.curso.DatosRepuestaCurso;
 import cobacha.foro.domain.topico.*;
@@ -104,7 +105,23 @@ public class TopicoController {
         Topico topico=topicoRepository.getReferenceById(id); // obtener datos del topico, que esta en BD y guardarlos en topico
         topico.actualizarDatos(datosActualizarTopico); // enviar datos que queremos actualizar al metodo actualizarDatos
 
-        return ResponseEntity.ok(id);
+        Curso cursoActualizar =cursoRepository.findByTopicoId(id);
+        cursoActualizar.actualizarDatos(datosActualizarTopico.nombreCurso(), datosActualizarTopico.categoriaCurso());
+
+        List<DatosRepuestaCurso> cursosRespuesta = topico.getCurso().stream()
+                .map(curso -> new DatosRepuestaCurso(curso.getNombre(), curso.getCategoria()))
+                .collect(Collectors.toList());
+
+        var datosTopico = new DatosRespuestaTopico(
+                topico.getId(),
+                topico.getTitulo(),
+                topico.getMensaje(),
+                topico.getFechaCreacion(),
+                topico.getStatus(),
+                topico.getAutor(),
+                cursosRespuesta
+        );
+        return ResponseEntity.ok(datosTopico);
     }
 
 }

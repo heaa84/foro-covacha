@@ -39,4 +39,13 @@ public class Curso {
     public void setTopico(Topico topico) {
         this.topico = topico;
     }
+
+    public void actualizarDatos(String nombre, String categoria) {
+        if (nombre != null) {
+            this.nombre = nombre;
+        }
+        if (categoria != null) {
+            this.categoria = categoria;
+        }
+    }
 }
