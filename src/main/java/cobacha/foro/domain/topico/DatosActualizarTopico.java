@@ -1,10 +1,10 @@
 package cobacha.foro.domain.topico;
 
-import jakarta.validation.constraints.NotNull;
-
 public record DatosActualizarTopico(
-        @NotNull Long id,
         String titulo,
-        String mensaje
-        ) {
+        String mensaje,
+        String autor
+        //String nombreCurso,
+        //String categoriaCurso
+) {
 }

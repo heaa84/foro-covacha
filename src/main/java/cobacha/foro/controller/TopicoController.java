@@ -1,6 +1,5 @@
 package cobacha.foro.controller;
 
-import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
 import cobacha.foro.domain.curso.DatosRepuestaCurso;
 import cobacha.foro.domain.topico.*;
@@ -45,7 +44,7 @@ public class TopicoController {
 
         // Guardar el tópico
         topicoRepository.save(topico);
-
+        // Crea una lista con y dentro un objecto Curso y se le pasa los parametros nobre y categoria
         List<DatosRepuestaCurso> cursosRespuesta = topico.getCurso().stream()
                 .map(curso -> new DatosRepuestaCurso(curso.getNombre(), curso.getCategoria()))
                 .collect(Collectors.toList());
@@ -58,7 +57,7 @@ public class TopicoController {
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 topico.getAutor(),
-                cursosRespuesta
+                cursosRespuesta// objeto curso
         );
 
         // Construir la URI para el recurso recién creado
@@ -72,17 +71,40 @@ public class TopicoController {
 
     // Listar todos los tópicos
     @GetMapping
-    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10) Pageable paginacion) {
+    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
-/*
-    // Actualizar tópico
-    @PutMapping
+    //Topico por ID
+    @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
-        Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id());
-        topico.actualizarDatos(datosActualizarTopico);
-        return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(), topico.getAutor(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion()));
+    public ResponseEntity <DatosRespuestaTopico> topicoPorId (@PathVariable Long id){
+        Topico topico=topicoRepository.getReferenceById(id);
+
+        List<DatosRepuestaCurso> cursosRespuesta = topico.getCurso().stream()
+                .map(curso -> new DatosRepuestaCurso(curso.getNombre(), curso.getCategoria()))
+                .collect(Collectors.toList());
+
+        var datosTopico = new DatosRespuestaTopico(
+                topico.getId(),
+                topico.getTitulo(),
+                topico.getMensaje(),
+                topico.getFechaCreacion(),
+                topico.getStatus(),
+                topico.getAutor(),
+                cursosRespuesta
+        );
+        return ResponseEntity.ok(datosTopico);
     }
-    */
+
+    // Actualizar tópico
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
+        Topico topico=topicoRepository.getReferenceById(id); // obtener datos del topico, que esta en BD y guardarlos en topico
+        topico.actualizarDatos(datosActualizarTopico); // enviar datos que queremos actualizar al metodo actualizarDatos
+
+        return ResponseEntity.ok(id);
+    }
+
 }
