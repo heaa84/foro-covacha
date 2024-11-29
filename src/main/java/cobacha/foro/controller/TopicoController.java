@@ -42,6 +42,8 @@ public class TopicoController {
 
         // Crear el tópico y asociarlo al curso
         Topico topico = new Topico(datosRegistroTopicoConCurso);
+        System.out.println(topico);
+        System.out.println(datosRegistroTopicoConCurso);
 
         // Guardar el tópico
         topicoRepository.save(topico);
