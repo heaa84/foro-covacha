@@ -83,16 +83,13 @@ public class TopicoController {
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
-    /*
+
     //Topico por ID
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity <DatosRespuestaTopico> topicoPorId (@PathVariable Long id){
         Topico topico=topicoRepository.getReferenceById(id);
 
-        List<DatosRepuestaCurso> cursosRespuesta = topico.getCurso().stream()
-                .map(curso -> new DatosRepuestaCurso(curso.getNombre(), curso.getCategoria()))
-                .collect(Collectors.toList());
 
         var datosTopico = new DatosRespuestaTopico(
                 topico.getId(),
@@ -101,11 +98,12 @@ public class TopicoController {
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 topico.getAutor(),
-                cursosRespuesta
+                topico.getCurso().getNombre(),
+                topico.getCurso().getCategoria()
         );
         return ResponseEntity.ok(datosTopico);
     }
-
+/*
     // Actualizar tópico
 
     @PutMapping("/{id}")
