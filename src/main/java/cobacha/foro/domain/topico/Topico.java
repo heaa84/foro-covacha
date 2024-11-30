@@ -1,12 +1,14 @@
 package cobacha.foro.domain.topico;
 
 import cobacha.foro.domain.curso.Curso;
+import cobacha.foro.domain.curso.CursoRepository;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,5 +65,6 @@ public class Topico {
         if (datosActualizarTopico.autor() != null) {
             this.autor = datosActualizarTopico.autor();
         }
+
     }
 }
