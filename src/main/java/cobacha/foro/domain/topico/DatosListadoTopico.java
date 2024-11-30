@@ -7,11 +7,13 @@ public record DatosListadoTopico(
         String autor,
         String titulo,
         String mensaje,
-        LocalDateTime fechaCreacion
+        LocalDateTime fechaCreacion,
+        String nombre,
+        String categoria
 
 ) {
     // Constructor
     public DatosListadoTopico(Topico topico){
-        this(topico.getId(),topico.getAutor(),topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion());
+        this(topico.getId(),topico.getAutor(),topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(), topico.getCurso().getNombre(), topico.getCurso().getCategoria());
     }
 }
