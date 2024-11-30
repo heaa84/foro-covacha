@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,37 +41,37 @@ public class TopicoController {
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
-        // Crear el tópico y asociarlo al curso
+        // creando curso si no existe en la bd con los datos enviados por insomnia
+        Curso curso = cursoRepository.findByNombre(datosRegistroTopicoConCurso.nombre())
+                .orElseGet(() -> {
+                    // Si no existe, crear un nuevo curso
+                    Curso nuevoCurso = new Curso();
+                    nuevoCurso.setNombre(datosRegistroTopicoConCurso.nombre());
+                    nuevoCurso.setCategoria(datosRegistroTopicoConCurso.categoria());
+                    // Guardar el nuevo curso en la base de datos
+                    return cursoRepository.save(nuevoCurso);
+                });
+        //crear topico y asociar al curso
         Topico topico = new Topico(datosRegistroTopicoConCurso);
-        System.out.println(topico);
-        System.out.println(datosRegistroTopicoConCurso);
+        topico.setCurso(curso); // Asociar el curso al topico
 
         // Guardar el tópico
         topicoRepository.save(topico);
-        // Crea una lista con y dentro un objecto Curso y se le pasa los parametros nobre y categoria
-        List<DatosRepuestaCurso> cursosRespuesta = topico.getCurso().stream()
-                .map(curso -> new DatosRepuestaCurso(curso.getNombre(), curso.getCategoria()))
-                .collect(Collectors.toList());
 
         // Crear el objeto de respuesta
-        DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(
-                topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getFechaCreacion(),
-                topico.getStatus(),
-                topico.getAutor(),
-                cursosRespuesta// objeto curso
-        );
+        DatosRepuestaCurso datosRepuestaCurso=new DatosRepuestaCurso(
+            curso.getNombre(),
+            curso.getCategoria()
+                );
 
         // Construir la URI para el recurso recién creado
         URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
 
         // Devolver la respuesta con estado CREATED
-        return ResponseEntity.created(url).body(datosRespuestaTopico);
+        return ResponseEntity.created(url).body(datosRepuestaCurso);
     }
 
-
+/*
 
     // Listar todos los tópicos
     @GetMapping
@@ -125,5 +126,5 @@ public class TopicoController {
         );
         return ResponseEntity.ok(datosTopico);
     }
-
+*/
 }

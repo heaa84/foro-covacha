@@ -1,16 +1,19 @@
 package cobacha.foro.domain.curso;
 
+
+import cobacha.foro.domain.topico.DatosRegistroTopicoConCurso;
 import cobacha.foro.domain.topico.Topico;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
+import lombok.*;
+
+import java.util.List;
 
 
 @Table(name = "cursos")
 @Entity(name = "Curso")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -24,9 +27,8 @@ public class Curso {
 
     private String categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "topico_id") // Asegúrate de que este nombre de columna coincida con tu esquema de base de datos
-    private Topico topico;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List <Topico> topicos;
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -36,8 +38,13 @@ public class Curso {
         this.categoria = categoria;
     }
 
-    public void setTopico(Topico topico) {
-        this.topico = topico;
+    public void setTopicos(List<Topico> topicos) {
+        this.topicos = topicos;
+    }
+
+    public Curso(@Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso) {
+        this.nombre = datosRegistroTopicoConCurso.nombre();
+        this.categoria = datosRegistroTopicoConCurso.categoria();
     }
 
     public void actualizarDatos(String nombre, String categoria) {

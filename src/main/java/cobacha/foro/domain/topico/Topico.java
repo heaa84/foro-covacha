@@ -5,19 +5,17 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
+
 @Table(name = "topicos")
 @Entity(name = "Topico")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -40,8 +38,10 @@ public class Topico {
     private TopicoStatus status;
 
     // Relación muchos a uno: un tópico pertenece a un curso
-    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    List <Curso> curso;
+
+    @ManyToOne
+    @JoinColumn(name = "curso_id") // Asegúrate de que este nombre de columna coincida con tu esquema de base de datos
+    private Curso curso;
 
     // Constructor para inicializar usando un objeto de tipo DatosRegistroTopico
     public Topico(@Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso) {
@@ -49,16 +49,9 @@ public class Topico {
         this.mensaje = datosRegistroTopicoConCurso.mensaje();
         this.autor=datosRegistroTopicoConCurso.autor();
         this.status= TopicoStatus.ACTIVO;
-        Curso curso=new Curso();
-        curso.setNombre(datosRegistroTopicoConCurso.nombreCurso());
-        curso.setCategoria(datosRegistroTopicoConCurso.categoriaCurso());
-        curso.setTopico(this);
-        this.curso=List.of(curso);
     }
 
-    public List<Curso> getCurso() {
-        return curso;
-    }
+
 
     public void actualizarDatos(DatosActualizarTopico datosActualizarTopico){
         if (datosActualizarTopico.titulo() != null) {
@@ -70,6 +63,5 @@ public class Topico {
         if (datosActualizarTopico.autor() != null) {
             this.autor = datosActualizarTopico.autor();
         }
-
     }
 }

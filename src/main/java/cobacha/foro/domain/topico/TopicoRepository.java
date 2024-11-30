@@ -8,6 +8,9 @@ import java.util.List;
 @Repository
 public interface TopicoRepository extends JpaRepository<Topico, Long> {
      // Verifica si ya existe un tópico con el mismo título y mensaje
+
      boolean existsByTituloAndMensaje(String titulo, String mensaje);
     // Puedes agregar métodos personalizados si es necesario, por ejemplo
+
+
 }
