@@ -2,6 +2,7 @@ package cobacha.foro.controller;
 
 import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
+import cobacha.foro.domain.curso.DatosListadoCursos;
 import cobacha.foro.domain.topico.*;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 import jakarta.transaction.Transactional;
@@ -25,14 +26,13 @@ public class CursoController {
     @Autowired
     private CursoRepository cursoRepository;
 
-    @PostMapping
-    @Transactional
 
     // Listar todos los Cursos
     @GetMapping
-    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
-        return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
+    public ResponseEntity<Page<DatosListadoCursos>> listadoTopicos(@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
+        return ResponseEntity.ok(cursoRepository.findAll(paginacion).map(DatosListadoCursos::new));
     }
+
 /*
     //Topico por ID
     @GetMapping("/{id}")

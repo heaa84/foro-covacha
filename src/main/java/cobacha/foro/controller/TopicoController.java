@@ -2,7 +2,7 @@ package cobacha.foro.controller;
 
 import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
-import cobacha.foro.domain.curso.DatosRepuestaCurso;
+
 import cobacha.foro.domain.topico.*;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 import jakarta.transaction.Transactional;
@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/topico")
