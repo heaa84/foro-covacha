@@ -58,26 +58,32 @@ public class TopicoController {
         // Guardar el tópico
         topicoRepository.save(topico);
 
-        // Crear el objeto de respuesta
-        DatosRepuestaCurso datosRepuestaCurso=new DatosRepuestaCurso(
-            curso.getNombre(),
-            curso.getCategoria()
-                );
+        DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(
+                topico.getId(),
+                topico.getTitulo(),
+                topico.getMensaje(),
+                topico.getFechaCreacion(),
+                topico.getStatus(),
+                topico.getAutor(),
+                curso.getNombre(),
+                curso.getCategoria()
+        );
 
         // Construir la URI para el recurso recién creado
         URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
 
         // Devolver la respuesta con estado CREATED
-        return ResponseEntity.created(url).body(datosRepuestaCurso);
+        return ResponseEntity.created(url).body(datosRespuestaTopico);
     }
 
-/*
+
 
     // Listar todos los tópicos
     @GetMapping
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
+    /*
     //Topico por ID
     @GetMapping("/{id}")
     @Transactional
