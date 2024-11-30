@@ -36,13 +36,13 @@ public class TopicoController {
             UriComponentsBuilder uriComponentsBuilder) {
 
         // Verificar si ya existe un tópico con el mismo título y mensaje
-        if (topicoRepository.existsByTituloAndMensaje(datosRegistroTopicoConCurso.titulo(), datosRegistroTopicoConCurso.mensaje())) {
+        if ((topicoRepository.existsByTituloAndMensaje(datosRegistroTopicoConCurso.titulo(), datosRegistroTopicoConCurso.mensaje()) && cursoRepository.existsByNombreAndCategoria(datosRegistroTopicoConCurso.nombre(), datosRegistroTopicoConCurso.categoria()))) {
             TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe un tópico con el mismo título y mensaje");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // creando curso si no existe en la bd con los datos enviados por insomnia
-        Curso curso = cursoRepository.findByNombre(datosRegistroTopicoConCurso.nombre())
+        Curso curso = cursoRepository.findByNombreAndCategoria(datosRegistroTopicoConCurso.nombre(), datosRegistroTopicoConCurso.categoria())
                 .orElseGet(() -> {
                     // Si no existe, crear un nuevo curso
                     Curso nuevoCurso = new Curso();

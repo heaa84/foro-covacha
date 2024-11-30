@@ -7,6 +7,10 @@ import java.util.Optional;
 
 public interface CursoRepository extends JpaRepository<Curso, Long> {
     Optional<Curso> findByNombre(@NotBlank String nombre);
+
+    boolean existsByNombreAndCategoria(@NotBlank String nombre, @NotBlank String categoria);
+
+    Optional<Curso> findByNombreAndCategoria(@NotBlank String nombre, @NotBlank String categoria);
     // Puedes agregar métodos personalizados aquí si es necesario
 
 }
