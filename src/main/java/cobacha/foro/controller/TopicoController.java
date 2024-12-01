@@ -90,68 +90,73 @@ public class TopicoController {
     //Topico por ID
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity <DatosRespuestaTopico> topicoPorId (@PathVariable Long id){
-        Topico topico=topicoRepository.getReferenceById(id);
-
-
-        var datosTopico = new DatosRespuestaTopico(
-                topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getFechaCreacion(),
-                topico.getStatus(),
-                topico.getAutor(),
-                topico.getCurso().getNombre(),
-                topico.getCurso().getCategoria()
-        );
-        return ResponseEntity.ok(datosTopico);
+    public ResponseEntity <?> topicoPorId (@PathVariable Long id){
+        Optional <Topico> optionalTopico= topicoRepository.findById(id);
+        if (optionalTopico.isPresent()){
+            Topico topico=topicoRepository.getReferenceById(id);
+            var datosTopico = new DatosRespuestaTopico(
+                    topico.getId(),
+                    topico.getTitulo(),
+                    topico.getMensaje(),
+                    topico.getFechaCreacion(),
+                    topico.getStatus(),
+                    topico.getAutor(),
+                    topico.getCurso().getNombre(),
+                    topico.getCurso().getCategoria()
+            );
+            return ResponseEntity.ok(datosTopico);
+        }
+        return ResponseEntity.badRequest().body("Topico con existe Revisar id");
     }
 
     // Actualizar tópico
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
-        Topico topico=topicoRepository.getReferenceById(id); // obtener datos del topico, que esta en BD y guardarlos en topico
-        topico.actualizarDatos(datosActualizarTopico); // enviar datos que queremos actualizar al metodo actualizarDatos
+    public ResponseEntity<?>  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
+        Optional<Topico> optionalTopico=topicoRepository.findById(id);
+        if (optionalTopico.isPresent()){
+            Topico topico=topicoRepository.getReferenceById(id); // obtener datos del topico, que esta en BD y guardarlos en topico
+            topico.actualizarDatos(datosActualizarTopico); // enviar datos que queremos actualizar al metodo actualizarDatos
         /* Actualizar Curso. Importante no actualizar directamente el curso sino crear una
         instancia de curso nueva, para posteriormene acignarcela al topico
          */
-        // Verificar si hay datos para actualizar en el curso
-        if(datosActualizarTopico.nombre() != null || datosActualizarTopico.categoria() !=null){
-            // Obtener los datos del curso actual del topico
-            String nombre=(datosActualizarTopico.nombre() != null ? datosActualizarTopico.nombre() : topico.getCurso().getNombre());
-            String categoria=(datosActualizarTopico.categoria() != null ? datosActualizarTopico.categoria() : topico.getCurso().getCategoria());
+            // Verificar si hay datos para actualizar en el curso
+            if(datosActualizarTopico.nombre() != null || datosActualizarTopico.categoria() !=null){
+                // Obtener los datos del curso actual del topico
+                String nombre=(datosActualizarTopico.nombre() != null ? datosActualizarTopico.nombre() : topico.getCurso().getNombre());
+                String categoria=(datosActualizarTopico.categoria() != null ? datosActualizarTopico.categoria() : topico.getCurso().getCategoria());
 
-            // Verificar si ya existe un Curso con los mismos datos
-            var cursoExistente=cursoRepository.findByNombreAndCategoria(nombre,categoria);
+                // Verificar si ya existe un Curso con los mismos datos
+                var cursoExistente=cursoRepository.findByNombreAndCategoria(nombre,categoria);
 
-            if (cursoExistente.isPresent()){// Si hay un curso existenete
-                // Asignar el curso existente al topico
-                topico.setCurso(cursoExistente.get());
-            }else {
-                // si no hay curso exitente crear un curso y asignar topico al curso
-                Curso nuevoCurso = new Curso();
-                nuevoCurso.setNombre(nombre);
-                nuevoCurso.setCategoria(categoria);
-                // Guardar el nuevo curso en BD
-                cursoRepository.save(nuevoCurso);
-                // Asignar El nuevo curso al topico
-                topico.setCurso(nuevoCurso);
+                if (cursoExistente.isPresent()){// Si hay un curso existenete
+                    // Asignar el curso existente al topico
+                    topico.setCurso(cursoExistente.get());
+                }else {
+                    // si no hay curso exitente crear un curso y asignar topico al curso
+                    Curso nuevoCurso = new Curso();
+                    nuevoCurso.setNombre(nombre);
+                    nuevoCurso.setCategoria(categoria);
+                    // Guardar el nuevo curso en BD
+                    cursoRepository.save(nuevoCurso);
+                    // Asignar El nuevo curso al topico
+                    topico.setCurso(nuevoCurso);
+                }
             }
+            var datosTopico = new DatosRespuestaTopico(
+                    topico.getId(),
+                    topico.getTitulo(),
+                    topico.getMensaje(),
+                    topico.getFechaCreacion(),
+                    topico.getStatus(),
+                    topico.getAutor(),
+                    topico.getCurso().getNombre(),
+                    topico.getCurso().getCategoria()
+            );
+            return ResponseEntity.ok(datosTopico);
         }
-
-        var datosTopico = new DatosRespuestaTopico(
-                topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getFechaCreacion(),
-                topico.getStatus(),
-                topico.getAutor(),
-                topico.getCurso().getNombre(),
-                topico.getCurso().getCategoria()
-        );
-        return ResponseEntity.ok(datosTopico);
+        return ResponseEntity.badRequest().body("Topico no entrontrado para actualizar");
     }
 
     // Eliminar Topico de la BD
