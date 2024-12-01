@@ -42,7 +42,7 @@ public class Topico {
     // Relación muchos a uno: un tópico pertenece a un curso
 
     @ManyToOne
-    @JoinColumn(name = "curso_id") // Asegúrate de que este nombre de columna coincida con tu esquema de base de datos
+    @JoinColumn(name = "curso_id", nullable = false) // Asegúrate de que este nombre de columna coincida con tu esquema de base de datos
     private Curso curso;
 
     // Constructor para inicializar usando un objeto de tipo DatosRegistroTopico

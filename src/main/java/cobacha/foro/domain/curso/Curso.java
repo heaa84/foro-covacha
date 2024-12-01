@@ -27,7 +27,7 @@ public class Curso {
 
     private String categoria;
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL , orphanRemoval = true, fetch = FetchType.EAGER)
     private List <Topico> topicos;
 
     public void setNombre(String nombre) {

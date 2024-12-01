@@ -5,17 +5,22 @@ import cobacha.foro.domain.curso.CursoRepository;
 
 import cobacha.foro.domain.topico.*;
 import cobacha.foro.infra.errores.TratadorDeErrores;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.TransactionalException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -148,4 +153,29 @@ public class TopicoController {
         );
         return ResponseEntity.ok(datosTopico);
     }
+
+    // Eliminar Topico de la BD
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> eliminarTopico(@PathVariable Long id) {
+        // Buscar el tópico a eliminar
+        Optional<Topico> optionalTopico = topicoRepository.findById(id);
+        if(optionalTopico.isPresent()){
+            Topico topico=optionalTopico.get();
+            // Obtener el curso asociado
+            Curso curso = topico.getCurso();
+            // Remover el tópico de la lista del curso
+            curso.getTopicos().remove(topico);
+            System.out.println("Numero de topicos: "+ curso.getTopicos().size());
+            if (curso.getTopicos().size()<1){
+                cursoRepository.delete(curso);
+                System.out.println("se Elimino  el curso");
+            }
+        }else {
+            return ResponseEntity.badRequest().body("Topico no encontrado o ya fue eliminado");
+        }
+
+        return ResponseEntity.ok("Tópico eliminado con éxito");
+    }
+
 }
