@@ -1,6 +1,9 @@
 package cobacha.foro.controller;
 
 import cobacha.foro.domain.usuarios.DatosAtuentificacionUsuario;
+import cobacha.foro.domain.usuarios.Usuario;
+import cobacha.foro.infra.security.DatosJWTToken;
+import cobacha.foro.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,14 @@ public class AutentificacionController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping
     public ResponseEntity autentificacionUsuario(@RequestBody @Valid DatosAtuentificacionUsuario datosAtuentificacionUsuario){
-        Authentication token =new UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena());
-        authenticationManager.authenticate(token);
-        return ResponseEntity.ok().build();
+        Authentication AuthToken =new UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena());
+        var usuarioAutenticado=authenticationManager.authenticate(AuthToken);
+        var JWTToken=tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
+        return ResponseEntity.ok(new DatosJWTToken(JWTToken));
     }
 }
