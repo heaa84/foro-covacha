@@ -1,5 +1,4 @@
 package cobacha.foro.domain.usuarios;
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
