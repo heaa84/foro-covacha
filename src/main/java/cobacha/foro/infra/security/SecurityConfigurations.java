@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfigurations {
 
+    // Aplicando filtro chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -23,12 +24,13 @@ public class SecurityConfigurations {
         return httpSecurity.build();
     }
 
+    // Aplicando AuthenticationManager y su configuración 
     @Bean
     public AuthenticationManager auteAuthenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // indicar el tipo de codificacion que bamos a uzar "Bcript"
+    // indicar el tipo de codificacion que vamos a uzar "Bcript"
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

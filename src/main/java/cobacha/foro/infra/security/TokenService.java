@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-
+// SERVIO PARA GENERAR TOQUEN
 @Service
 public class TokenService {
-    @Value("${api.security.secret}")
-    private String apiSecret;
+    @Value("${api.security.secret}") // VARIABLE DE ENTORNO QUE ESTA EN PROPETIS
+    private String apiSecret; //VARIABLE CON EL VALOR DE LA VARIANLE DE ENTORNO
+    // GENERAMOS RL TOKEN
     public  String generarToken(Usuario usuario){
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
@@ -29,6 +30,7 @@ public class TokenService {
             // Invalid Signing configuration / Couldn't convert Claims.
         }
     }
+    // GENERAMOS LA FECHA DE EXPIRACIO O TIEMPO EN QUE ES VALIDO EL TOKEN
     public Instant generarFechaExpiracio(){
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-06:00"));
     }
