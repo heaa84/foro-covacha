@@ -14,6 +14,12 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // Odtener el Token del header
+        var token= request.getHeader("Authorization");
+        if (token==null || token==""){
+            throw new RuntimeException("El Token enviado no es valido");
+        }
+        token=token.replace("Bearer ", "");
         filterChain.doFilter(request,response); // Mandar Request y Responce
     }
 }
