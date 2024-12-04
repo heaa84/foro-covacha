@@ -27,33 +27,27 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("cobacha") // Quien emite el token
                     .withSubject(usuario.getNombre()) // Usuario que emite el token
-                    .withClaim("id",usuario.getId()) // ID de l usuario
+                    //.withClaim("id",usuario.getId()) // ID de el usuario
                     .withExpiresAt(generarFechaExpiracio()) // Tiempo de expidacion del JWT "tenemos que crear un metodo instan"
                     .sign(algorithm);
         } catch (JWTCreationException exception){
-            throw new RuntimeException();
-            // Invalid Signing configuration / Couldn't convert Claims.
+            throw new RuntimeException("Error al generar token JWT", exception);
         }
     }
     // Validando token /JWTVerifier
-    public String getSubject(String token) {
-        DecodedJWT verifier = null;
+    public String getSubject(String token) throws RuntimeException {
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret); // algorito tiene que ser el mismo que ocupamos para la generacion del token
-            verifier = JWT.require(algorithm)
+            String subject= JWT.require(algorithm)
                     .withIssuer("cobacha")
                     .build()
-                    .verify(token);
-            verifier.getSubject();
+                    .verify(token)
+                    .getSubject();
+            System.out.println(subject);
+            return subject;
         } catch (JWTVerificationException exception) {
-            // Invalid signature/claims
-            System.out.println(exception.toString()
-            );
+            throw new RuntimeException("Token no valido o expirado!!");
         }
-        if (verifier.getSubject()==null) {
-            throw new RuntimeException("Verifiel invalido");
-        }
-        return verifier.getSubject();
     }
 
     // GENERAMOS LA FECHA DE EXPIRACIO O TIEMPO EN QUE ES VALIDO EL TOKEN
