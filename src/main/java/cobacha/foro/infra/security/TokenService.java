@@ -27,7 +27,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("cobacha") // Quien emite el token
                     .withSubject(usuario.getNombre()) // Usuario que emite el token
-                    //.withClaim("id",usuario.getId()) // ID de el usuario
+                    .withClaim("id",usuario.getId()) // ID de el usuario
                     .withExpiresAt(generarFechaExpiracio()) // Tiempo de expidacion del JWT "tenemos que crear un metodo instan"
                     .sign(algorithm);
         } catch (JWTCreationException exception){
