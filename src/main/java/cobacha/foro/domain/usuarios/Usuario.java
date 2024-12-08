@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-// La interfaceUserDetails nos ayudara, por medio del retorno de sus metodos a indicarle, entre otras cosas, que parametros seran nuestros usuarios y contraseñasa,
+// La interfaceUserDetails nos ayudará, por medio del retorno de sus metodos a indicarle, entre otras cosas, que parametros seran nuestros usuarios y contraseñasa,
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
