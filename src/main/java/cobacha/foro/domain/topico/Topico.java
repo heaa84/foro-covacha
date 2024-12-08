@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,6 @@ public class Topico {
     private String titulo;
     @NotBlank
     private String mensaje;
-    @NotBlank
     private String autor;
 
     private LocalDateTime fechaCreacion = LocalDateTime.now(); // Se asigna la fecha actual por defecto
@@ -49,9 +49,9 @@ public class Topico {
     public Topico(@Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso) {
         this.titulo = datosRegistroTopicoConCurso.titulo();
         this.mensaje = datosRegistroTopicoConCurso.mensaje();
-        this.autor=datosRegistroTopicoConCurso.autor();
         this.status= TopicoStatus.ACTIVO;
     }
+
 
 
 

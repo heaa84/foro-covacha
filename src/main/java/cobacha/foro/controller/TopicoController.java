@@ -1,20 +1,21 @@
 package cobacha.foro.controller;
-
 import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
 
 import cobacha.foro.domain.topico.*;
+import cobacha.foro.domain.usuarios.Usuario;
 import cobacha.foro.infra.errores.TratadorDeErrores;
-import jakarta.persistence.EntityNotFoundException;
+
 import jakarta.transaction.Transactional;
-import jakarta.transaction.TransactionalException;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,7 +37,11 @@ public class TopicoController {
     @Transactional
     public ResponseEntity registrarTopicoConCurso(
             @RequestBody @Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso,
-            UriComponentsBuilder uriComponentsBuilder) {
+            UriComponentsBuilder uriComponentsBuilder,Authentication authentication) {
+        //Asignar autor logueado al Topico
+        Usuario usuario=(Usuario) authentication.getPrincipal();
+
+
 
         // Verificar si ya existe un tópico con el mismo título y mensaje
         if ((topicoRepository.existsByTituloAndMensaje(datosRegistroTopicoConCurso.titulo(), datosRegistroTopicoConCurso.mensaje()) && cursoRepository.existsByNombreAndCategoria(datosRegistroTopicoConCurso.nombre(), datosRegistroTopicoConCurso.categoria()))) {
@@ -54,9 +59,11 @@ public class TopicoController {
                     // Guardar el nuevo curso en la base de datos
                     return cursoRepository.save(nuevoCurso);
                 });
+
         //crear topico y asociar al curso
         Topico topico = new Topico(datosRegistroTopicoConCurso);
         topico.setCurso(curso); // Asociar el curso al topico
+        topico.setAutor(usuario.getNombre()); // Asociar El usuario al Autor
 
         // Guardar el tópico
         topicoRepository.save(topico);

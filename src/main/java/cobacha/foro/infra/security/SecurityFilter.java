@@ -1,5 +1,7 @@
 package cobacha.foro.infra.security;
 
+import cobacha.foro.domain.topico.Topico;
+import cobacha.foro.domain.usuarios.Usuario;
 import cobacha.foro.domain.usuarios.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
