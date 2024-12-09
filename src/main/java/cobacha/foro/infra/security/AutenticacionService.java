@@ -1,6 +1,6 @@
 package cobacha.foro.infra.security;
 
-import cobacha.foro.domain.usuarios.UsuarioRepository;
+import cobacha.foro.domain.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

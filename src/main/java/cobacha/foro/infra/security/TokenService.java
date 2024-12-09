@@ -1,8 +1,7 @@
 package cobacha.foro.infra.security;
 
-import cobacha.foro.domain.usuarios.Usuario;
+import cobacha.foro.domain.usuario.Usuario;
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;

@@ -1,11 +1,10 @@
 package cobacha.foro.controller;
 
-import cobacha.foro.domain.usuarios.DatosAtuentificacionUsuario;
-import cobacha.foro.domain.usuarios.Usuario;
+import cobacha.foro.domain.usuario.DatosAtuentificacionUsuario;
+import cobacha.foro.domain.usuario.Usuario;
 import cobacha.foro.infra.security.DatosJWTToken;
 import cobacha.foro.infra.security.TokenService;
 import jakarta.validation.Valid;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

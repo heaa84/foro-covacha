@@ -3,7 +3,7 @@ import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
 
 import cobacha.foro.domain.topico.*;
-import cobacha.foro.domain.usuarios.Usuario;
+import cobacha.foro.domain.usuario.Usuario;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 
 import jakarta.transaction.Transactional;
