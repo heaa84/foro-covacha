@@ -50,6 +50,8 @@ public class UsuarioController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
-
+        //verificar si existe el usuario ya en la BD
+        if (usuarioRepository.existsByNombre(datosRegistrarNuevoUsuario.nombre()))
+            return ResponseEntity.ok(datosRegistrarNuevoUsuario);
     }
 }
