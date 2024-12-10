@@ -64,7 +64,7 @@ public class UsuarioController {
             contrasenaBcryp=encoder.encode(contrasenaNueva);
         }
 
-        Usuario usuario=new Usuario (datosRegistrarNuevoUsuario, contrasenaBcryp);
+        Usuario usuario=usuarioRepository.save(new Usuario (datosRegistrarNuevoUsuario, contrasenaBcryp));
         return ResponseEntity.ok(datosRegistrarNuevoUsuario);
     }
 }
