@@ -51,7 +51,11 @@ public class UsuarioController {
     @Transactional
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
         //verificar si existe el usuario ya en la BD
-        if (usuarioRepository.existsByNombre(datosRegistrarNuevoUsuario.nombre()))
-            return ResponseEntity.ok(datosRegistrarNuevoUsuario);
+        if (usuarioRepository.existsByNombre(datosRegistrarNuevoUsuario.nombre())){
+            TratadorDeErrores errorResponse =new TratadorDeErrores("Ya existe el usuario");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+        Usuario usuario=new Usuario (datosRegistrarNuevoUsuario);
+        return ResponseEntity.ok(datosRegistrarNuevoUsuario);
     }
 }
