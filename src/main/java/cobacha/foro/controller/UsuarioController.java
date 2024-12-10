@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,7 @@ public class UsuarioController {
 
     // Actualizar los Usuarios
     // Solo actualizar Nombre, Email, Contraseña y perfil
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<?> actualizarUsuario (@PathVariable Long id, @RequestBody @Valid DatosActualizarUsuario datosActualizarUsuario){
@@ -49,11 +52,14 @@ public class UsuarioController {
         }
         return ResponseEntity.ok(datosActualizarUsuario);
     }
-    // crear usuarios nuevo solo ADMin
+    // crear usuarios nuevo solo ADMMIN
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Transactional
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Usuario autenticado: " + auth.getName());
+        System.out.println("Roles asignados: " + auth.getAuthorities());
         String contrasenaBcryp="";
         //verificar si existe el usuario ya en la BD
         if (usuarioRepository.existsByNombre(datosRegistrarNuevoUsuario.nombre())){

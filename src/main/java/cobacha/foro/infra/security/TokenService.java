@@ -51,6 +51,6 @@ public class TokenService {
 
     // GENERAMOS LA FECHA DE EXPIRACIO O TIEMPO EN QUE ES VALIDO EL TOKEN
     public Instant generarFechaExpiracio(){
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-06:00"));
+        return LocalDateTime.now().plusHours(200).toInstant(ZoneOffset.of("-06:00")); // para producion cambiar a 2 horas
     }
 }

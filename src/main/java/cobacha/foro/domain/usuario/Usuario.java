@@ -42,8 +42,15 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        // Validación de perfil
+        if (!this.perfil.equalsIgnoreCase("ADMIN") && !this.perfil.equalsIgnoreCase("USER")) {
+            throw new IllegalArgumentException("Perfil no válido: " + this.perfil);
+        }
+        // Asignación de la autoridad basada en el perfil
+        String rol = "ROLE_" + this.perfil.toUpperCase();
+        return List.of(new SimpleGrantedAuthority(rol));
     }
+
 
     @Override
     public String getPassword() {
