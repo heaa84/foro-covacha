@@ -1,12 +1,17 @@
 package cobacha.foro.domain.usuario;
+import cobacha.foro.domain.usuarios.DatosActualizarUsuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
+
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 
 @Table(name = "usuarios")
 @Entity(name = "usuario")
@@ -58,5 +63,27 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void actualizarDatos(DatosActualizarUsuario datosActualizarUsuario) {
+    if (datosActualizarUsuario.nombre()!=null){
+        this.nombre= datosActualizarUsuario.nombre();
+    }
+
+    if (datosActualizarUsuario.correo_electronico()!=null){
+        this.correo_electronico= datosActualizarUsuario.correo_electronico();
+    }
+        if (datosActualizarUsuario.contrasena()!=null){
+            String contrasenaNueva = datosActualizarUsuario.contrasena();
+            BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(10);
+            String result=encoder.encode(contrasenaNueva);
+            System.out.println(result);
+            this.contrasena= result;
+        }
+        if(datosActualizarUsuario.perfil()!=null){
+            if (datosActualizarUsuario.perfil().equals("ADMIN") || datosActualizarUsuario.perfil().equals("USER")){
+                this.perfil= datosActualizarUsuario.perfil();
+            }
+        }
     }
 }
