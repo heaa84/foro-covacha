@@ -1,5 +1,6 @@
 package cobacha.foro.domain.usuario;
 import cobacha.foro.domain.usuarios.DatosActualizarUsuario;
+import cobacha.foro.domain.usuarios.DatosRegistrarNuevoUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -29,6 +30,15 @@ public class Usuario implements UserDetails {
     private String correo_electronico;
     private String contrasena;
     private String perfil;
+
+    public Usuario(@Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario, String contrasenaBcryp) {
+    this.nombre = datosRegistrarNuevoUsuario.nombre();
+    this.correo_electronico = datosRegistrarNuevoUsuario.correo_electronico();
+
+
+    this.contrasena = contrasenaBcryp;
+    this.perfil = datosRegistrarNuevoUsuario.perfil();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

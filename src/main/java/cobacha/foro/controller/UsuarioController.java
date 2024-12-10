@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -50,12 +51,20 @@ public class UsuarioController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
+        String contrasenaBcryp="";
         //verificar si existe el usuario ya en la BD
         if (usuarioRepository.existsByNombre(datosRegistrarNuevoUsuario.nombre())){
             TratadorDeErrores errorResponse =new TratadorDeErrores("Ya existe el usuario");
             return ResponseEntity.badRequest().body(errorResponse);
         }
-        Usuario usuario=new Usuario (datosRegistrarNuevoUsuario);
+
+        if (datosRegistrarNuevoUsuario.contrasena()!=null){
+            String contrasenaNueva = datosRegistrarNuevoUsuario.contrasena();
+            BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(10);
+            contrasenaBcryp=encoder.encode(contrasenaNueva);
+        }
+
+        Usuario usuario=new Usuario (datosRegistrarNuevoUsuario, contrasenaBcryp);
         return ResponseEntity.ok(datosRegistrarNuevoUsuario);
     }
 }
