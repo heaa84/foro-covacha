@@ -57,13 +57,19 @@ public class UsuarioController {
             TratadorDeErrores errorResponse =new TratadorDeErrores("Ya existe el usuario");
             return ResponseEntity.badRequest().body(errorResponse);
         }
-
+        // encriptar contraseña
         if (datosRegistrarNuevoUsuario.contrasena()!=null){
             String contrasenaNueva = datosRegistrarNuevoUsuario.contrasena();
             BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(10);
             contrasenaBcryp=encoder.encode(contrasenaNueva);
         }
-
+        //validar perfil
+        if(datosRegistrarNuevoUsuario.perfil()!=null){
+            if (!datosRegistrarNuevoUsuario.perfil().equals("ADMIN") && !datosRegistrarNuevoUsuario.perfil().equals("USER")){
+                TratadorDeErrores errorResponse =new TratadorDeErrores("Error al crear el perfil");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+        }
         Usuario usuario=usuarioRepository.save(new Usuario (datosRegistrarNuevoUsuario, contrasenaBcryp));
         return ResponseEntity.ok(datosRegistrarNuevoUsuario);
     }
