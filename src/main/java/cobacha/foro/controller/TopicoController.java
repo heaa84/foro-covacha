@@ -34,6 +34,7 @@ public class TopicoController {
     @Autowired
     private CursoRepository cursoRepository;
 
+    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
     @PostMapping
     @Transactional
     public ResponseEntity registrarTopicoConCurso(
@@ -90,12 +91,14 @@ public class TopicoController {
 
 
     // Listar todos los tópicos
+    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
     @GetMapping
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
 
     //Topico por ID
+    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity <?> topicoPorId (@PathVariable Long id){

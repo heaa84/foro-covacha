@@ -31,6 +31,7 @@ public class UsuarioController {
 
 
     // Listar todos los Usuarios
+    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
     @GetMapping
     public ResponseEntity<Page<DatosListadoUsuario>> listadoUsuarios(@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosListadoUsuario::new));
