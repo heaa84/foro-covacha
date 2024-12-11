@@ -1,6 +1,4 @@
 package cobacha.foro.domain.usuario;
-import cobacha.foro.domain.usuarios.DatosActualizarUsuario;
-import cobacha.foro.domain.usuarios.DatosRegistrarNuevoUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;

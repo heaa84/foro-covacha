@@ -1,7 +1,5 @@
 package cobacha.foro.domain.usuario;
 
-import cobacha.foro.domain.usuarios.DatosActualizarUsuario;
-import jakarta.validation.Valid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

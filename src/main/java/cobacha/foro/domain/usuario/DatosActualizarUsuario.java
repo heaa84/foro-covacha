@@ -1,6 +1,4 @@
-package cobacha.foro.domain.usuarios;
-
-import cobacha.foro.domain.usuario.Usuario;
+package cobacha.foro.domain.usuario;
 
 public record DatosActualizarUsuario(
         String nombre,
