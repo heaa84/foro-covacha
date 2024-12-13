@@ -10,6 +10,7 @@ import cobacha.foro.domain.topico.dto.DatosRespuestaTopico;
 import cobacha.foro.domain.usuario.Usuario;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 
 import jakarta.validation.Valid;
@@ -31,6 +32,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/topico")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired

@@ -6,6 +6,7 @@ import cobacha.foro.domain.usuario.UsuarioRepository;
 import cobacha.foro.domain.usuario.dto.DatosActualizarUsuario;
 import cobacha.foro.domain.usuario.dto.DatosRegistrarNuevoUsuario;
 import cobacha.foro.infra.errores.TratadorDeErrores;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@SecurityRequirement(name = "bearer-key")
 public class UsuarioController {
 
     @Autowired
