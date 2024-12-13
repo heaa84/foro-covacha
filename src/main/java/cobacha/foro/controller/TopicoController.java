@@ -3,6 +3,10 @@ import cobacha.foro.domain.curso.Curso;
 import cobacha.foro.domain.curso.CursoRepository;
 
 import cobacha.foro.domain.topico.*;
+import cobacha.foro.domain.topico.dto.DatosActualizarTopico;
+import cobacha.foro.domain.topico.dto.DatosListadoTopico;
+import cobacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
+import cobacha.foro.domain.topico.dto.DatosRespuestaTopico;
 import cobacha.foro.domain.usuario.Usuario;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 
@@ -34,7 +38,7 @@ public class TopicoController {
     @Autowired
     private CursoRepository cursoRepository;
 
-    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping
     @Transactional
     public ResponseEntity registrarTopicoConCurso(
@@ -91,14 +95,14 @@ public class TopicoController {
 
 
     // Listar todos los tópicos
-    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
 
     //Topico por ID
-    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity <?> topicoPorId (@PathVariable Long id){

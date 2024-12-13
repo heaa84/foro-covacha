@@ -1,4 +1,4 @@
-package cobacha.foro.domain.usuario;
+package cobacha.foro.domain.usuario.dto;
 
 public record DatosAtuentificacionUsuario(
         String nombre,

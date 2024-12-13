@@ -1,4 +1,4 @@
-package cobacha.foro.domain.topico;
+package cobacha.foro.domain.topico.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

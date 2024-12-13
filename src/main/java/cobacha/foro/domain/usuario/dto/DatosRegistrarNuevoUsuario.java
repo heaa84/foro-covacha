@@ -1,5 +1,6 @@
-package cobacha.foro.domain.usuario;
+package cobacha.foro.domain.usuario.dto;
 
+import cobacha.foro.domain.usuario.Usuario;
 import jakarta.validation.constraints.NotBlank;
 
 public record DatosRegistrarNuevoUsuario(

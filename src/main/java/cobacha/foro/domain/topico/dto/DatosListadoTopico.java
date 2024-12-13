@@ -1,4 +1,6 @@
-package cobacha.foro.domain.topico;
+package cobacha.foro.domain.topico.dto;
+
+import cobacha.foro.domain.topico.Topico;
 
 import java.time.LocalDateTime;
 

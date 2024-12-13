@@ -1,6 +1,8 @@
 package cobacha.foro.controller;
 
 import cobacha.foro.domain.curso.*;
+import cobacha.foro.domain.curso.dto.DatosActualizarCurso;
+import cobacha.foro.domain.curso.dto.DatosRepuestaCurso;
 import cobacha.foro.domain.topico.*;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 import jakarta.transaction.Transactional;
@@ -12,9 +14,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("/curso")
@@ -27,10 +26,10 @@ public class CursoController {
 
 
     // Listar todos los Cursos
-    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
-    public ResponseEntity<Page<DatosListadoCursos>> listadoTopicos(@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
-        return ResponseEntity.ok(cursoRepository.findAll(paginacion).map(DatosListadoCursos::new));
+    public ResponseEntity<Page<Curso.DatosListadoCursos>> listadoTopicos(@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
+        return ResponseEntity.ok(cursoRepository.findAll(paginacion).map(Curso.DatosListadoCursos::new));
     }
 
 

@@ -1,7 +1,7 @@
 package cobacha.foro.domain.curso;
 
 
-import cobacha.foro.domain.topico.DatosRegistroTopicoConCurso;
+import cobacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
 import cobacha.foro.domain.topico.Topico;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -53,6 +53,19 @@ public class Curso {
         }
         if (categoria != null) {
             this.categoria = categoria;
+        }
+    }
+
+    public static record DatosListadoCursos(
+            Long id,
+            String nombre,
+            String categoria
+
+    ) {
+        // Constructor
+
+        public DatosListadoCursos(Curso curso) {
+            this(curso.getId(), curso.getNombre(), curso.getCategoria());
         }
     }
 }

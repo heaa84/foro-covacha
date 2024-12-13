@@ -1,4 +1,6 @@
-package cobacha.foro.domain.usuario;
+package cobacha.foro.domain.usuario.dto;
+
+import cobacha.foro.domain.usuario.Usuario;
 
 public record DatosListadoUsuario(
         Long id,

@@ -1,6 +1,6 @@
 package cobacha.foro.controller;
 
-import cobacha.foro.domain.usuario.DatosAtuentificacionUsuario;
+import cobacha.foro.domain.usuario.dto.DatosAtuentificacionUsuario;
 import cobacha.foro.domain.usuario.Usuario;
 import cobacha.foro.infra.security.DatosJWTToken;
 import cobacha.foro.infra.security.TokenService;
@@ -28,7 +28,7 @@ public class AutentificacionController {
     @Autowired
     private TokenService tokenService;
 
-    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping
     public ResponseEntity autentificacionUsuario(@RequestBody @Valid DatosAtuentificacionUsuario datosAtuentificacionUsuario){
         Authentication AuthToken =new UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena());

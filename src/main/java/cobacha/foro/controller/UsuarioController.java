@@ -1,10 +1,10 @@
 package cobacha.foro.controller;
 
-import cobacha.foro.domain.usuario.DatosListadoUsuario;
+import cobacha.foro.domain.usuario.dto.DatosListadoUsuario;
 import cobacha.foro.domain.usuario.Usuario;
 import cobacha.foro.domain.usuario.UsuarioRepository;
-import cobacha.foro.domain.usuario.DatosActualizarUsuario;
-import cobacha.foro.domain.usuario.DatosRegistrarNuevoUsuario;
+import cobacha.foro.domain.usuario.dto.DatosActualizarUsuario;
+import cobacha.foro.domain.usuario.dto.DatosRegistrarNuevoUsuario;
 import cobacha.foro.infra.errores.TratadorDeErrores;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class UsuarioController {
 
 
     // Listar todos los Usuarios
-    @PreAuthorize("hasRole('ADMIN') , hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
     public ResponseEntity<Page<DatosListadoUsuario>> listadoUsuarios(@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosListadoUsuario::new));
