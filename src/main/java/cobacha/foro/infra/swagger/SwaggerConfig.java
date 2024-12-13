@@ -12,9 +12,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI(@Value("${app.version:0.0.1-SNAPSHOT}") String appVersion) {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Academia")
+                        .title("Foro Cobacha")
                         .version(appVersion)
-                        .description("Sistema de gestión de estudiantes.")
+                        .description("API RES de un foro de sobre programacion ....")
                 );
     }
 }
