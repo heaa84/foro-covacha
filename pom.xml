@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cobacha.foro.cobacha</groupId>
-	<artifactId>foro-cobacha</artifactId>
+	<artifactId>foro-covacha</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>foro-cobacha</name>
 	<description>API REST foro cobaca con java y sping boot</description>
