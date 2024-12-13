@@ -15,7 +15,12 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes("bearer-key",
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))             .info(new Info()
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")))
+
+                .info(new Info()
                         .title("Foro Cobacha")
                         .version(appVersion)
                         .description("API RES de un foro de sobre programacion ....")
