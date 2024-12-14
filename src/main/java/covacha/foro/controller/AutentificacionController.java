@@ -4,6 +4,7 @@ import covacha.foro.domain.usuario.dto.DatosAtuentificacionUsuario;
 import covacha.foro.domain.usuario.Usuario;
 import covacha.foro.infra.security.DatosJWTToken;
 import covacha.foro.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,9 @@ public class AutentificacionController {
     private TokenService tokenService;
 
     @PostMapping
+    @Operation(
+            summary = "Autentificar usuario",
+            description = "Autentificar usuario, por default nombre: admin, contraseña: admin")
     public ResponseEntity autentificacionUsuario(@RequestBody @Valid DatosAtuentificacionUsuario datosAtuentificacionUsuario){
         Authentication AuthToken =new UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena());
         var usuarioAutenticado=authenticationManager.authenticate(AuthToken);

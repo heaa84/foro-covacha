@@ -121,6 +121,9 @@ public class TopicoController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/{id}")
     @Transactional
+    @Operation(
+            summary = "Obtener tópico por id",
+            description = "Devuelve el tópico seleccionado por id ")
     public ResponseEntity <?> topicoPorId (@PathVariable Long id){
         Optional <Topico> optionalTopico= topicoRepository.findById(id);
         if (optionalTopico.isPresent()){

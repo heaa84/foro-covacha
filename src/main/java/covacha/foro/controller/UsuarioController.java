@@ -54,10 +54,10 @@ public class UsuarioController {
     @PutMapping("/{id}")
     @Transactional
     @Operation(
-            summary = "Obtiene un usuario por ID",
-            description = "Retorna un usuario pasando un id @PathVariable")
+            summary = "Actualiza un usuario por ID",
+            description = "Modifica los datos de un usuario, seleccionado por su id @PathVariable")
     public ResponseEntity<?> actualizarUsuario (@PathVariable Long id, @RequestBody @Valid DatosActualizarUsuario datosActualizarUsuario){
-        Optional <Usuario> usuariobd=usuarioRepository.findById(id); // Guardar el usuario de la BD en opctional si existe
+        Optional <Usuario> usuariobd=usuarioRepository.findById(id); // busca usuario en la BD por id, y lo guarda en Optional usuario
         if (usuariobd.isPresent()){
             Usuario usuario=usuarioRepository.getReferenceById(usuariobd.get().getId());
             usuario.actualizarDatos(datosActualizarUsuario);
@@ -72,7 +72,7 @@ public class UsuarioController {
     @PostMapping
     @Transactional
     @Operation(
-            summary = "Registrar usuario",
+            summary = "Registrar nuevo usuario",
             description = "Registra un usuario nuevo solo ADMIN")
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
