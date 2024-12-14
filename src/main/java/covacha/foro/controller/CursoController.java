@@ -7,6 +7,8 @@ import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
 import covacha.foro.domain.topico.TopicoRepository;
 import covacha.foro.infra.errores.TratadorDeErrores;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -32,7 +34,12 @@ public class CursoController {
     // Listar todos los Cursos
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
-    public ResponseEntity<Page<Curso.DatosListadoCursos>> listadoTopicos(@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
+    @Operation(
+            summary = "Obtiene la lista de Cursos",
+            description = "Retorna todos los cursos de la BD")
+    public ResponseEntity<Page<Curso.DatosListadoCursos>> listadoTopicos(
+            @Parameter(required = true)
+            @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(cursoRepository.findAll(paginacion).map(Curso.DatosListadoCursos::new));
     }
 
@@ -42,6 +49,9 @@ public class CursoController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Transactional
+    @Operation(
+            summary = "Actualiza curso",
+            description = "Solo ADMIN puede actualizar cursos de la BD")
     public ResponseEntity  actualizarCurso (@PathVariable Long id,@RequestBody @Valid DatosActualizarCurso datosActualizarCurso){
         // Verificar si ya existe un Curso
         if (cursoRepository.existsByNombreAndCategoria(datosActualizarCurso.nombre(), datosActualizarCurso.categoria())) {

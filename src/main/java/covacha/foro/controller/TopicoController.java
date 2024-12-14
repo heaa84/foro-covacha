@@ -12,7 +12,9 @@ import covacha.foro.domain.topico.dto.DatosRespuestaTopico;
 import covacha.foro.domain.usuario.Usuario;
 import covacha.foro.infra.errores.TratadorDeErrores;
 
+
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 
@@ -46,6 +48,9 @@ public class TopicoController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping
     @Transactional
+    @Operation(
+            summary = "Registra un tópico",
+            description = "Registramos un tópico")
     public ResponseEntity registrarTopicoConCurso(
             @RequestBody @Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso,
             UriComponentsBuilder uriComponentsBuilder,Authentication authentication) {
@@ -99,16 +104,18 @@ public class TopicoController {
 
 
 
-    // Listar todos los tópicos
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
     @Operation(
             summary = "Obtiene la lista de tópicos",
-            description = "Retorna todos los tópicos sin requerir parámetros de entrada",
-            parameters = {}) // Evita que Swagger pida parámetros
-    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
+            description = "Retorna todos los tópicos sin requerir parámetros de entrada")
+    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(
+            @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
+            @PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
+
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
+    // Listar todos los tópicos
 
     //Topico por ID
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
@@ -137,6 +144,9 @@ public class TopicoController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Transactional
+    @Operation(
+            summary = "Actualizar tópico",
+            description = "Solo ADMIN puede actualizar un tópico")
     public ResponseEntity<?>  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
         Optional<Topico> optionalTopico=topicoRepository.findById(id);
         if (optionalTopico.isPresent()){
@@ -187,6 +197,9 @@ public class TopicoController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Transactional
+    @Operation(
+            summary = "Eliminar tópico",
+            description = "Solo un ADMIN puede eliminar un tópico")
     public ResponseEntity<?> eliminarTopico(@PathVariable Long id) {
         // Buscar el tópico a eliminar
         Optional<Topico> optionalTopico = topicoRepository.findById(id);

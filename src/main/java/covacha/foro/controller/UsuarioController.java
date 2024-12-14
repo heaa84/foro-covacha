@@ -38,11 +38,13 @@ public class UsuarioController {
     // Listar todos los Usuarios
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
+    // Configuramos lo que va a mostrar swagger de este método
     @Operation(
             summary = "Obtiene la lista de usuarios",
             description = "Retorna todos los usuarios sin requerir parámetros de entrada")
     public ResponseEntity<Page<DatosListadoUsuario>> listadoUsuarios(
-            @Parameter(hidden = true)  @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
+            @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
+            @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosListadoUsuario::new));
     }
 
@@ -51,6 +53,9 @@ public class UsuarioController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Transactional
+    @Operation(
+            summary = "Obtiene un usuario por ID",
+            description = "Retorna un usuario pasando un id @PathVariable")
     public ResponseEntity<?> actualizarUsuario (@PathVariable Long id, @RequestBody @Valid DatosActualizarUsuario datosActualizarUsuario){
         Optional <Usuario> usuariobd=usuarioRepository.findById(id); // Guardar el usuario de la BD en opctional si existe
         if (usuariobd.isPresent()){
@@ -66,6 +71,9 @@ public class UsuarioController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Transactional
+    @Operation(
+            summary = "Registrar usuario",
+            description = "Registra un usuario nuevo solo ADMIN")
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Usuario autenticado: " + auth.getName());

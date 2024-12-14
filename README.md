@@ -35,6 +35,20 @@ public class SwaggerConfig {
 }
 
 ```
-
+2. Notaciones para la implementación swagger en los controller (Ejemplo):
+```java    
+// Listar todos los Usuarios
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @GetMapping
+    // Configuramos lo que va a mostrar swagger de este método
+    @Operation(
+            summary = "Obtiene la lista de usuarios",
+            description = "Retorna todos los usuarios sin requerir parámetros de entrada")
+    public ResponseEntity<Page<DatosListadoUsuario>> listadoUsuarios(
+            @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida            
+            @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
+        return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosListadoUsuario::new));
+    }
+```
 3. URL de la cocumentacion:
 http://localhost:8080/swagger-ui/index.html
