@@ -1,1 +1,21 @@
-pring-boot-starter-security 3.3.6
+# Creando Spring Security key con Token JWT (JSON Web Tokens)
+## Estructura:
+- covacha.foro/controller/
+  - AutenticationController.java
+- covacha.foro/infra/security
+    - AutenticacionService.java
+    - DatosJWTToken.java
+    - SecurityConfigurations.java
+    - doFilterInternal.java
+    - TokenService
+
+
+
+
+
+
+
+
+
+
+
