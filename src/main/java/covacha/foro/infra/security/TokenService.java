@@ -19,12 +19,12 @@ public class TokenService {
     private String apiSecret; //VARIABLE CON EL VALOR DE LA VARIANLE DE ENTORNO
     private DecodedJWT decodedJWT;
 
-    // GENERAMOS RL TOKEN
+    // Método que genera el JWT si los datos del usuario son válidos.
     public  String generarToken(Usuario usuario){
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.create()
-                    .withIssuer("cobacha") // Quien emite el token
+                    .withIssuer("covacha") // Quien emite el token
                     .withSubject(usuario.getNombre()) // Usuario que emite el token
                     .withClaim("id",usuario.getId()) // ID de el usuario
                     .withExpiresAt(generarFechaExpiracio()) // Tiempo de expidacion del JWT "tenemos que crear un metodo instan"
@@ -33,12 +33,12 @@ public class TokenService {
             throw new RuntimeException("Error al generar token JWT", exception);
         }
     }
-    // Validando token /JWTVerifier
+    // Método que verifica que el JWT sea válido.
     public String getSubject(String token) throws RuntimeException {
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret); // algorito tiene que ser el mismo que ocupamos para la generacion del token
             String subject= JWT.require(algorithm)
-                    .withIssuer("cobacha")
+                    .withIssuer("covacha")
                     .build()
                     .verify(token)
                     .getSubject();
@@ -49,7 +49,7 @@ public class TokenService {
         }
     }
 
-    // GENERAMOS LA FECHA DE EXPIRACIO O TIEMPO EN QUE ES VALIDO EL TOKEN
+    // Método que genera la fecha y hora, de expiración del token
     public Instant generarFechaExpiracio(){
         return LocalDateTime.now().plusHours(200).toInstant(ZoneOffset.of("-06:00")); // para producion cambiar a 2 horas
     }

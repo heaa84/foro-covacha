@@ -32,13 +32,13 @@ public class AutentificacionController {
             summary = "Autentificar usuario",
             description = "Autentificar usuario, por default nombre: admin, contraseña: admin")
     public ResponseEntity autentificacionUsuario(@RequestBody @Valid DatosAtuentificacionUsuario datosAtuentificacionUsuario){
-        // crea variable AuthToken a partir de una clase UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena()) 
-        // Esto no crea un nuevo objeto de tipo Authentication 
-        Authentication AuthToken =new UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena());
-        // Usamos usuarioAutenticado=authenticationManager.authenticate(AuthToken) donde, mandamos AuthToken como parametro si el metodo consige autenticar los datos,
+        // crea variable authenticationToken a partir de una clase UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena())
+        // Esto nos crea un nuevo objeto de tipo Authentication
+        Authentication authenticationToken =new UsernamePasswordAuthenticationToken(datosAtuentificacionUsuario.nombre(),datosAtuentificacionUsuario.contrasena());
+        // Usamos usuarioAutenticado=authenticationManager.authenticate(authenticationToken) donde, mandamos authenticationToken como parámetro si el método consigue autenticar los datos,
         // Devuelve un objeto con los datos de la autentificación,
         // Y lo guardamos en usuarioAutentificado
-        var usuarioAutentificado=authenticationManager.authenticate(AuthToken);
+        var usuarioAutentificado=authenticationManager.authenticate(authenticationToken);
         // El método tokenService.generarToken nos ayuda a generar el JWT, tenemos que pasarle el usuario principal ya autentificado.
         // lo guardamos en JWTToken
         var JWTToken=tokenService.generarToken((Usuario) usuarioAutentificado.getPrincipal());
