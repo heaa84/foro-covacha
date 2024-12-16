@@ -1,5 +1,7 @@
 package covacha.foro.domain.respuesta.dto;
 
+import covacha.foro.domain.respuesta.Respuesta;
+
 import java.time.LocalDateTime;
 
 public record DatosRespuesta(
@@ -8,4 +10,16 @@ public record DatosRespuesta(
         LocalDateTime fechaCreacion,
         String usuarioQueRespondio
 ) {
+    public DatosRespuesta(Respuesta respuesta) {
+        this(
+                respuesta.getId(),
+                respuesta.getMensaje(),
+                respuesta.getFechaCreacion(),
+                respuesta.getUsuarioQueRespondio()
+        );
+    }
 }
+
+
+
+

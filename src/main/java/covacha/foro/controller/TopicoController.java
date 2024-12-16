@@ -115,7 +115,7 @@ public class TopicoController {
     }
 
 
-
+    // Listar todos los tópicos
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
     @Operation(
@@ -125,9 +125,12 @@ public class TopicoController {
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
 
-        return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
+            var topicos = topicoRepository.findAll(paginacion)
+                .map(DatosListadoTopico::new);
+
+        return ResponseEntity.ok(topicos);
+
     }
-    // Listar todos los tópicos
 
     //Topico por ID
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
