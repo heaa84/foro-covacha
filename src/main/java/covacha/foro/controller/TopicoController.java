@@ -3,6 +3,7 @@ import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
 
 
+import covacha.foro.domain.respuesta.dto.DatosRespuesta;
 import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
 import covacha.foro.domain.topico.dto.DatosActualizarTopico;
@@ -84,22 +85,33 @@ public class TopicoController {
         // Guardar el tópico
         topicoRepository.save(topico);
 
-        DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(
+        // Mapear las respuestas del tópico a la lista de DatosRespuesta
+        var respuestas = topico.getRespuestas().stream()
+                .map(respuesta -> new DatosRespuesta(
+                        respuesta.getId(),
+                        respuesta.getMensaje(),
+                        respuesta.getFechaCreacion(),
+                        respuesta.getUsuarioQueRespondio()
+                ))
+                .toList();
+
+        var datosTopico = new DatosRespuestaTopico(
                 topico.getId(),
                 topico.getTitulo(),
                 topico.getMensaje(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 topico.getAutor(),
-                curso.getNombre(),
-                curso.getCategoria()
+                topico.getCurso().getNombre(),
+                topico.getCurso().getCategoria(),
+                respuestas // Agregamos las respuestas al DTO
         );
 
         // Construir la URI para el recurso recién creado
         URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
 
         // Devolver la respuesta con estado CREATED
-        return ResponseEntity.created(url).body(datosRespuestaTopico);
+        return ResponseEntity.created(url).body(datosTopico);
     }
 
 
@@ -126,8 +138,19 @@ public class TopicoController {
             description = "Devuelve el tópico seleccionado por id ")
     public ResponseEntity <?> topicoPorId (@PathVariable Long id){
         Optional <Topico> optionalTopico= topicoRepository.findById(id);
-        if (optionalTopico.isPresent()){
-            Topico topico=topicoRepository.getReferenceById(id);
+        if (optionalTopico.isPresent()) {
+            Topico topico = optionalTopico.get();
+
+            // Mapear las respuestas del tópico a la lista de DatosRespuesta
+            var respuestas = topico.getRespuestas().stream()
+                    .map(respuesta -> new DatosRespuesta(
+                            respuesta.getId(),
+                            respuesta.getMensaje(),
+                            respuesta.getFechaCreacion(),
+                            respuesta.getUsuarioQueRespondio()
+                    ))
+                    .toList();
+
             var datosTopico = new DatosRespuestaTopico(
                     topico.getId(),
                     topico.getTitulo(),
@@ -136,8 +159,10 @@ public class TopicoController {
                     topico.getStatus(),
                     topico.getAutor(),
                     topico.getCurso().getNombre(),
-                    topico.getCurso().getCategoria()
+                    topico.getCurso().getCategoria(),
+                    respuestas // Agregamos las respuestas al DTO
             );
+
             return ResponseEntity.ok(datosTopico);
         }
         return ResponseEntity.badRequest().body("Topico con existe Revisar id");
@@ -181,6 +206,16 @@ public class TopicoController {
                     topico.setCurso(nuevoCurso);
                 }
             }
+            // Mapear las respuestas del tópico a la lista de DatosRespuesta
+            var respuestas = topico.getRespuestas().stream()
+                    .map(respuesta -> new DatosRespuesta(
+                            respuesta.getId(),
+                            respuesta.getMensaje(),
+                            respuesta.getFechaCreacion(),
+                            respuesta.getUsuarioQueRespondio()
+                    ))
+                    .toList();
+
             var datosTopico = new DatosRespuestaTopico(
                     topico.getId(),
                     topico.getTitulo(),
@@ -189,7 +224,8 @@ public class TopicoController {
                     topico.getStatus(),
                     topico.getAutor(),
                     topico.getCurso().getNombre(),
-                    topico.getCurso().getCategoria()
+                    topico.getCurso().getCategoria(),
+                    respuestas // Agregamos las respuestas al DTO
             );
             return ResponseEntity.ok(datosTopico);
         }

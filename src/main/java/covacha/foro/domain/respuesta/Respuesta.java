@@ -19,9 +19,10 @@ public class Respuesta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "usuario_que_respondio")
     private String mensaje;
     private LocalDateTime fechaCreacion = LocalDateTime.now();
+    @Column(name = "usuario_que_respondio")
+    private String usuarioQueRespondio;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "topico_id")
     private Topico topico;

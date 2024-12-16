@@ -1,9 +1,11 @@
 package covacha.foro.domain.topico.dto;
 
 
+import covacha.foro.domain.respuesta.dto.DatosRespuesta;
 import covacha.foro.domain.topico.TopicoStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public record DatosRespuestaTopico(
@@ -14,6 +16,7 @@ public record DatosRespuestaTopico(
         TopicoStatus estado,
         String autor,
         String nombre,
-        String categoria
+        String categoria,
+        List<DatosRespuesta> respuestas // Nueva lista de respuestas
         ) {
 }
