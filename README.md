@@ -2,6 +2,19 @@
 
 Foro Covacha es una API REST desarrollada en Java con Spring Boot 3. Esta API permite gestionar un foro con autenticación y autorización mediante JWT y OAuth2. Usa Flyway para la gestión de migraciones de la base de datos y JPA para la persistencia. Además, incluye H2 como base de datos en memoria para facilitar el desarrollo y pruebas.
 
+![GitHub followers](https://img.shields.io/github/followers/heaa84)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/heaa84/foro-covacha)
+![GitHub License](https://img.shields.io/github/license/heaa84/foro-covacha)
+![Gitea Release](https://img.shields.io/gitea/v/release/heaa84/foro-covacha)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/heaa84/foro-covacha)
+
+
+
+
+
+
+
+
 ## Características
 
 - **API RESTful** para interactuar con el foro.
