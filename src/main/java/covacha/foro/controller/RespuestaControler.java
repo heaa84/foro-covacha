@@ -6,6 +6,7 @@ import covacha.foro.domain.respuesta.RespuestaRepository;
 import covacha.foro.domain.respuesta.dto.DatosRegistrarRespuesta;
 import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
+import covacha.foro.domain.topico.TopicoStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -60,10 +61,13 @@ public class RespuestaControler {
         respuesta.setUsuarioQueRespondio(nombreUsuario);
         respuesta.setTopico(topico);
 
-        // 4. Guardamos la respuesta en BD
+        // 4. Pasar estado de tópico a resuelto
+        topico.setStatus(TopicoStatus.valueOf("RESUELTO"));
+
+        // 5. Guardamos la respuesta en BD
         respuestaRepository.save(respuesta);
 
-        // 5. retornar respuesta
+        // 6. retornar respuesta
         URI url = URI.create("/respuesta/" + respuesta.getId());
         return  ResponseEntity.created(url).body("Respuesta creada exitosamente");
     };
