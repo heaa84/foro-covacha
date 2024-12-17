@@ -6,8 +6,6 @@ CREATE TABLE topicos (
 
     status VARCHAR(50) NOT NULL,
     autor varchar(150) NOT NULL,
-    /*
-    curso BIGINT NOT NULL, -- CURSO???
-    */
+    curso_id int,
     PRIMARY KEY (id)
 );
