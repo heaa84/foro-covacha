@@ -123,7 +123,7 @@ public class TopicoController {
             description = "Retorna todos los tópicos sin requerir parámetros de entrada")
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
-            @PageableDefault(size = 10 , sort = "fechaCreacion") Pageable paginacion) {
+            @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
 
             var topicos = topicoRepository.findAll(paginacion)
                 .map(DatosListadoTopico::new);
