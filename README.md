@@ -4,15 +4,6 @@ Foro Covacha es una API REST desarrollada en Java con Spring Boot 3. Esta API pe
 
 ![GitHub followers](https://img.shields.io/github/followers/heaa84)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/heaa84/foro-covacha)
-![GitHub License](https://img.shields.io/github/license/heaa84/foro-covacha)
-![Gitea Release](https://img.shields.io/gitea/v/release/heaa84/foro-covacha)
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/heaa84/foro-covacha)
-
-
-
-
-
-
 
 
 ## Características
