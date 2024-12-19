@@ -5,9 +5,12 @@ import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
 import covacha.foro.infra.errores.TratadorDeErrores;
+import covacha.foro.service.validadores.ValidarActualizarCurso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CursoService {
@@ -15,7 +18,13 @@ public class CursoService {
     @Autowired
     private CursoRepository cursoRepository;
 
+    @Autowired
+    private List<ValidarActualizarCurso> validarActualizarCursos;
+
     public ResponseEntity<?> actualizarCurso(Long id, DatosActualizarCurso datos){
+        // Validadores
+        validarActualizarCursos.forEach(v-> v.validar(datos));
+
         // Verificar si ya existe un Curso
         if (cursoRepository.existsByNombreAndCategoria(datos.nombre(), datos.categoria())) {
             TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe el Curso");
