@@ -4,8 +4,8 @@ import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
-import covacha.foro.infra.errores.TratadorDeErrores;
-import covacha.foro.service.validadores.ValidarActualizarCurso;
+
+import covacha.foro.service.validadores.ValidadorCurso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,24 +19,16 @@ public class CursoService {
     private CursoRepository cursoRepository;
 
     @Autowired
-    private List<ValidarActualizarCurso> validarActualizarCursos;
+    private List<ValidadorCurso> validadorCursos;
+
 
     public ResponseEntity<?> actualizarCurso(Long id, DatosActualizarCurso datos){
         // Validadores
-        validarActualizarCursos.forEach(v-> v.validar(datos));
+        validadorCursos.forEach(v-> v.validar(datos));
 
-        // Verificar si ya existe un Curso
-        if (cursoRepository.existsByNombreAndCategoria(datos.nombre(), datos.categoria())) {
-            TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe el Curso");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
         Curso curso=cursoRepository.getReferenceById(id);
-        curso.actualizarDatos(datos.nombre(), datos.categoria());
-        var datosCurso= new DatosRepuestaCurso(
-                curso.getId(),
-                curso.getNombre(),
-                curso.getCategoria()
-        );
+        curso.actualizarDatos(datos);
+        var datosCurso= new DatosRepuestaCurso(id,datos.nombre(), datos.categoria());
         return ResponseEntity.ok(datosCurso);
     }
 }

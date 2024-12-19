@@ -1,8 +1,10 @@
 package covacha.foro.domain.curso;
 
 
+import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
 import covacha.foro.domain.topico.Topico;
+import covacha.foro.domain.usuario.dto.DatosActualizarUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -47,12 +49,12 @@ public class Curso {
         this.categoria = datosRegistroTopicoConCurso.categoria();
     }
 
-    public void actualizarDatos(String nombre, String categoria) {
+    public void actualizarDatos(DatosActualizarCurso datos) {
         if (nombre != null) {
-            this.nombre = nombre;
+            this.nombre =datos.nombre();
         }
         if (categoria != null) {
-            this.categoria = categoria;
+            this.categoria = datos.categoria();
         }
     }
 
