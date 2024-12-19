@@ -1,11 +1,10 @@
-package covacha.foro.service;
+package covacha.foro.service.curso.validadores;
 
 import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
 
-import covacha.foro.service.validadores.ValidadorCurso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

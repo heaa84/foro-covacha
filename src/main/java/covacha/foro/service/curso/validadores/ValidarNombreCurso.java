@@ -1,4 +1,4 @@
-package covacha.foro.service.validadores;
+package covacha.foro.service.curso.validadores;
 
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.service.ValidacionExcepcion;

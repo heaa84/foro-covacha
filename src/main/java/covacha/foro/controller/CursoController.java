@@ -4,10 +4,7 @@ package covacha.foro.controller;
 import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
-import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
-import covacha.foro.domain.topico.TopicoRepository;
-import covacha.foro.infra.errores.TratadorDeErrores;
-import covacha.foro.service.CursoService;
+import covacha.foro.service.curso.validadores.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearer-key")
 public class CursoController {
 
-    @Autowired
-    private TopicoRepository topicoRepository;
     @Autowired
     private CursoRepository cursoRepository;
     @Autowired
