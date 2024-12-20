@@ -34,7 +34,7 @@ public class TopicoService {
     public ResponseEntity<?> registrarTopicoConCurso(DatosRegistroTopicoConCurso datos, UriComponentsBuilder uriComponentsBuilder, Authentication authentication){
         // valdadores
         //interfaceValidList.forEach(v-> v.validar(datos));
-        // logica ya validado los posibles errores
+        // lógica ya validado los posibles errores
 
         //Asignar autor logueado al Topico
         Usuario usuario=(Usuario) authentication.getPrincipal();
