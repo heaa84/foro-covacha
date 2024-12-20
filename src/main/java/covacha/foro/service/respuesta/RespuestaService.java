@@ -6,6 +6,7 @@ import covacha.foro.domain.respuesta.dto.DatosRegistrarRespuesta;
 import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
 import covacha.foro.domain.topico.TopicoStatus;
+import covacha.foro.service.respuesta.validadores.InterfaceValid;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 @Service
 public class RespuestaService {
     @Autowired
-    private List <ValidadorRespuesta> validadorRespuestas;
+    private List <InterfaceValid> validadorRespuestas;
 
     @Autowired
     private TopicoRepository topicoRepository;

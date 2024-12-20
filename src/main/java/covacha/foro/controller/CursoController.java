@@ -4,7 +4,7 @@ package covacha.foro.controller;
 import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
-import covacha.foro.service.curso.validadores.CursoService;
+import covacha.foro.service.curso.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

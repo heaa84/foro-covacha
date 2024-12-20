@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidarExistenciaDeCurso implements ValidadorCurso {
+public class ValidExistencia implements InterfaceValid {
     @Autowired
     private CursoRepository cursoRepository;
     public void validar(DatosActualizarCurso datos){

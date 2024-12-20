@@ -2,11 +2,10 @@ package covacha.foro.service.curso.validadores;
 
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.service.ValidacionExcepcion;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidarNombreCurso implements ValidadorCurso {
+public class ValidNombre implements InterfaceValid {
     public void validar(DatosActualizarCurso datos){
         String regex="^[a-zA-Z]{3,}$";
         if (!datos.nombre().matches(regex)){

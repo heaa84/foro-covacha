@@ -14,6 +14,7 @@ import covacha.foro.domain.usuario.Usuario;
 import covacha.foro.infra.errores.TratadorDeErrores;
 
 
+import covacha.foro.service.topico.TopicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,8 +44,14 @@ public class TopicoController {
 
     @Autowired
     private TopicoRepository topicoRepository;
+
     @Autowired
     private CursoRepository cursoRepository;
+
+    @Autowired
+    private TopicoService topicoService;
+
+
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping
@@ -54,64 +61,9 @@ public class TopicoController {
             description = "Registramos un tópico")
     public ResponseEntity registrarTopicoConCurso(
             @RequestBody @Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso,
-            UriComponentsBuilder uriComponentsBuilder,Authentication authentication) {
-        //Asignar autor logueado al Topico
-        Usuario usuario=(Usuario) authentication.getPrincipal();
-
-
-
-        // Verificar si ya existe un tópico con el mismo título y mensaje
-        if ((topicoRepository.existsByTituloAndMensaje(datosRegistroTopicoConCurso.titulo(), datosRegistroTopicoConCurso.mensaje()) && cursoRepository.existsByNombreAndCategoria(datosRegistroTopicoConCurso.nombre(), datosRegistroTopicoConCurso.categoria()))) {
-            TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe un tópico con el mismo título y mensaje");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-
-        // creando curso si no existe en la bd con los datos enviados por insomnia
-        Curso curso = cursoRepository.findByNombreAndCategoria(datosRegistroTopicoConCurso.nombre(), datosRegistroTopicoConCurso.categoria())
-                .orElseGet(() -> {
-                    // Si no existe, crear un nuevo curso
-                    Curso nuevoCurso = new Curso();
-                    nuevoCurso.setNombre(datosRegistroTopicoConCurso.nombre());
-                    nuevoCurso.setCategoria(datosRegistroTopicoConCurso.categoria());
-                    // Guardar el nuevo curso en la base de datos
-                    return cursoRepository.save(nuevoCurso);
-                });
-
-        //crear topico y asociar al curso
-        Topico topico = new Topico(datosRegistroTopicoConCurso);
-        topico.setCurso(curso); // Asociar el curso al topico
-        topico.setAutor(usuario.getNombre()); // Asociar El usuario al Autor
-
-        // Guardar el tópico
-        topicoRepository.save(topico);
-
-        // Mapear las respuestas del tópico a la lista de DatosRespuesta
-        var respuestas = topico.getRespuestas().stream()
-                .map(respuesta -> new DatosRespuesta(
-                        respuesta.getId(),
-                        respuesta.getMensaje(),
-                        respuesta.getFechaCreacion(),
-                        respuesta.getUsuarioQueRespondio()
-                ))
-                .toList();
-
-        var datosTopico = new DatosRespuestaTopico(
-                topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getFechaCreacion(),
-                topico.getStatus(),
-                topico.getAutor(),
-                topico.getCurso().getNombre(),
-                topico.getCurso().getCategoria(),
-                respuestas // Agregamos las respuestas al DTO
-        );
-
-        // Construir la URI para el recurso recién creado
-        URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
-
-        // Devolver la respuesta con estado CREATED
-        return ResponseEntity.created(url).body(datosTopico);
+            UriComponentsBuilder uriComponentsBuilder,
+            Authentication authentication) {
+        return ResponseEntity.ok(topicoService.registrarTopicoConCurso(datosRegistroTopicoConCurso,uriComponentsBuilder,authentication));
     }
 
 
@@ -127,9 +79,7 @@ public class TopicoController {
 
             var topicos = topicoRepository.findAll(paginacion)
                 .map(DatosListadoTopico::new);
-
         return ResponseEntity.ok(topicos);
-
     }
 
     //Topico por ID

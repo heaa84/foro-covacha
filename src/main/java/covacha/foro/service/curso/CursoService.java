@@ -1,10 +1,11 @@
-package covacha.foro.service.curso.validadores;
+package covacha.foro.service.curso;
 
 import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
 
+import covacha.foro.service.curso.validadores.InterfaceValid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CursoService {
     private CursoRepository cursoRepository;
 
     @Autowired
-    private List<ValidadorCurso> validadorCursos;
+    private List<InterfaceValid> validadorCursos;
 
 
     public ResponseEntity<?> actualizarCurso(Long id, DatosActualizarCurso datos){

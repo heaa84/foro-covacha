@@ -1,11 +1,12 @@
-package covacha.foro.service.respuesta;
+package covacha.foro.service.topico.validadores;
 
 import covacha.foro.domain.respuesta.dto.DatosRegistrarRespuesta;
 import covacha.foro.service.ValidacionExcepcion;
+import covacha.foro.service.respuesta.validadores.InterfaceValid;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidarStringRespuesta implements ValidadorRespuesta{
+public class ValidMensaje implements InterfaceValid {
     @Override
     public void validar(DatosRegistrarRespuesta datos) {
         if(datos.mensaje().length()<4){
