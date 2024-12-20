@@ -10,7 +10,6 @@ public class ValidarNombreCurso implements ValidadorCurso {
     public void validar(DatosActualizarCurso datos){
         String regex="^[a-zA-Z]{3,}$";
         if (!datos.nombre().matches(regex)){
-            ResponseEntity.badRequest().body("Error en el nombre");
             throw new ValidacionExcepcion("Error en el nombre");
         }
         if (!datos.categoria().matches(regex)){
