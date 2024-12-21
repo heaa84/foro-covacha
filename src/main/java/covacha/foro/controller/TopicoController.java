@@ -9,9 +9,7 @@ import covacha.foro.domain.topico.TopicoRepository;
 import covacha.foro.domain.topico.dto.DatosActualizarTopico;
 import covacha.foro.domain.topico.dto.DatosListadoTopico;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
-import covacha.foro.domain.topico.dto.DatosRespuestaTopico;
-import covacha.foro.domain.usuario.Usuario;
-import covacha.foro.infra.errores.TratadorDeErrores;
+
 
 
 import covacha.foro.service.topico.TopicoService;
@@ -31,8 +29,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 
 import java.util.Optional;
 
@@ -104,17 +100,7 @@ public class TopicoController {
                     ))
                     .toList();
 
-            var datosTopico = new DatosRespuestaTopico(
-                    topico.getId(),
-                    topico.getTitulo(),
-                    topico.getMensaje(),
-                    topico.getFechaCreacion(),
-                    topico.getStatus(),
-                    topico.getAutor(),
-                    topico.getCurso().getNombre(),
-                    topico.getCurso().getCategoria(),
-                    respuestas // Agregamos las respuestas al DTO
-            );
+            var datosTopico = new DatosListadoTopico(topico);
 
             return ResponseEntity.ok(datosTopico);
         }
@@ -169,17 +155,7 @@ public class TopicoController {
                     ))
                     .toList();
 
-            var datosTopico = new DatosRespuestaTopico(
-                    topico.getId(),
-                    topico.getTitulo(),
-                    topico.getMensaje(),
-                    topico.getFechaCreacion(),
-                    topico.getStatus(),
-                    topico.getAutor(),
-                    topico.getCurso().getNombre(),
-                    topico.getCurso().getCategoria(),
-                    respuestas // Agregamos las respuestas al DTO
-            );
+            var datosTopico = new DatosListadoTopico(topico);
             return ResponseEntity.ok(datosTopico);
         }
         return ResponseEntity.badRequest().body("Topico no entrontrado para actualizar");

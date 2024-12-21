@@ -1,4 +1,4 @@
-package covacha.foro.service.topico.validadores;
+package covacha.foro.service.usuario.validadores;
 
 import covacha.foro.domain.respuesta.dto.DatosRegistrarRespuesta;
 import covacha.foro.service.ValidacionExcepcion;
@@ -6,7 +6,7 @@ import covacha.foro.service.respuesta.validadores.InterfaceValid;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidMensaje implements InterfaceValid {
+public class ValidNombreUsuario implements InterfaceValid {
     @Override
     public void validar(DatosRegistrarRespuesta datos) {
         if(datos.mensaje().length()<4){

@@ -5,10 +5,10 @@ import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.respuesta.dto.DatosRespuesta;
 import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
+import covacha.foro.domain.topico.dto.DatosListadoTopico;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
-import covacha.foro.domain.topico.dto.DatosRespuestaTopico;
+
 import covacha.foro.domain.usuario.Usuario;
-import covacha.foro.infra.errores.TratadorDeErrores;
 import covacha.foro.service.topico.validadores.InterfaceValid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,18 +32,12 @@ public class TopicoService {
     private CursoRepository cursoRepository;
 
     public ResponseEntity<?> registrarTopicoConCurso(DatosRegistroTopicoConCurso datos, UriComponentsBuilder uriComponentsBuilder, Authentication authentication){
-        // valdadores
-        //interfaceValidList.forEach(v-> v.validar(datos));
-        // lógica ya validado los posibles errores
+        // validadores
+        // Verificar si ya existe un tópico con el mismo título y mensaje
+        interfaceValidList.forEach(v-> v.validar(datos)); // lógica ya validado los posibles errores
 
         //Asignar autor logueado al Topico
         Usuario usuario=(Usuario) authentication.getPrincipal();
-
-        // Verificar si ya existe un tópico con el mismo título y mensaje
-        if ((topicoRepository.existsByTituloAndMensaje(datos.titulo(), datos.mensaje()) && cursoRepository.existsByNombreAndCategoria(datos.nombre(), datos.categoria()))) {
-            TratadorDeErrores errorResponse = new TratadorDeErrores("Ya existe un tópico con el mismo título y mensaje");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
 
         // creando curso si no existe en la bd con los datos enviados por insomnia
         Curso curso = cursoRepository.findByNombreAndCategoria(datos.nombre(), datos.categoria())
@@ -74,21 +68,11 @@ public class TopicoService {
                 ))
                 .toList();
 
-        var datosTopico = new DatosRespuestaTopico(
-                topico.getId(),
-                topico.getTitulo(),
-                topico.getMensaje(),
-                topico.getFechaCreacion(),
-                topico.getStatus(),
-                topico.getAutor(),
-                topico.getCurso().getNombre(),
-                topico.getCurso().getCategoria(),
-                respuestas // Agregamos las respuestas al DTO
-        );
+        var datosTopico = new DatosListadoTopico(topico);
 
         // Construir la URI para el recurso recién creado
         URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
 
-        return ResponseEntity.created(url).body(datos);
+        return ResponseEntity.created(url).body(datosTopico);
     }
 }
