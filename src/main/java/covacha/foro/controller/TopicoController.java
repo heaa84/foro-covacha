@@ -65,7 +65,6 @@ public class TopicoController {
     public ResponseEntity<Page<DatosTopico>> listadoTopicos(
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
-
             var topicos = topicoRepository.findAll(paginacion)
                 .map(DatosTopico::new);
         return ResponseEntity.ok(topicos);
@@ -79,7 +78,7 @@ public class TopicoController {
             summary = "Obtener tópico por id",
             description = "Devuelve el tópico seleccionado por id ")
     public ResponseEntity <?> topicoPorId (@PathVariable Long id){
-            return ResponseEntity.badRequest().body("Topico con existe Revisar id");
+            return ResponseEntity.ok(topicoService.buscarTopicoID(id));
     }
 
     // Actualizar tópico
@@ -90,50 +89,7 @@ public class TopicoController {
             summary = "Actualizar tópico",
             description = "Solo ADMIN puede actualizar un tópico")
     public ResponseEntity<?>  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
-        Optional<Topico> optionalTopico=topicoRepository.findById(id);
-        if (optionalTopico.isPresent()){
-            Topico topico=topicoRepository.getReferenceById(id); // obtener datos del topico, que esta en BD y guardarlos en topico
-            topico.actualizarDatos(datosActualizarTopico); // enviar datos que queremos actualizar al metodo actualizarDatos
-        /* Actualizar Curso. Importante no actualizar directamente el curso sino crear una
-        instancia de curso nueva, para posteriormene acignarcela al topico
-         */
-            // Verificar si hay datos para actualizar en el curso
-            if(datosActualizarTopico.nombre() != null || datosActualizarTopico.categoria() !=null){
-                // Obtener los datos del curso actual del topico
-                String nombre=(datosActualizarTopico.nombre() != null ? datosActualizarTopico.nombre() : topico.getCurso().getNombre());
-                String categoria=(datosActualizarTopico.categoria() != null ? datosActualizarTopico.categoria() : topico.getCurso().getCategoria());
-
-                // Verificar si ya existe un Curso con los mismos datos
-                var cursoExistente=cursoRepository.findByNombreAndCategoria(nombre,categoria);
-
-                if (cursoExistente.isPresent()){// Si hay un curso existenete
-                    // Asignar el curso existente al topico
-                    topico.setCurso(cursoExistente.get());
-                }else {
-                    // si no hay curso exitente crear un curso y asignar topico al curso
-                    Curso nuevoCurso = new Curso();
-                    nuevoCurso.setNombre(nombre);
-                    nuevoCurso.setCategoria(categoria);
-                    // Guardar el nuevo curso en BD
-                    cursoRepository.save(nuevoCurso);
-                    // Asignar El nuevo curso al topico
-                    topico.setCurso(nuevoCurso);
-                }
-            }
-            // Mapear las respuestas del tópico a la lista de DatosRespuesta
-            var respuestas = topico.getRespuestas().stream()
-                    .map(respuesta -> new DatosRespuesta(
-                            respuesta.getId(),
-                            respuesta.getMensaje(),
-                            respuesta.getFechaCreacion(),
-                            respuesta.getUsuarioQueRespondio()
-                    ))
-                    .toList();
-
-            var datosTopico = new DatosTopico(topico);
-            return ResponseEntity.ok(datosTopico);
-        }
-        return ResponseEntity.badRequest().body("Topico no entrontrado para actualizar");
+        return ResponseEntity.ok(topicoService.actualizarTopico(id, datosActualizarTopico));
     }
 
     // Eliminar Topico de la BD
@@ -144,24 +100,7 @@ public class TopicoController {
             summary = "Eliminar tópico",
             description = "Solo un ADMIN puede eliminar un tópico")
     public ResponseEntity<?> eliminarTopico(@PathVariable Long id) {
-        // Buscar el tópico a eliminar
-        Optional<Topico> optionalTopico = topicoRepository.findById(id);
-        if(optionalTopico.isPresent()){
-            Topico topico=optionalTopico.get();
-            // Obtener el curso asociado
-            Curso curso = topico.getCurso();
-            // Remover el tópico de la lista del curso
-            curso.getTopicos().remove(topico);
-            System.out.println("Numero de topicos: "+ curso.getTopicos().size());
-            if (curso.getTopicos().size()<1){
-                cursoRepository.delete(curso);
-                System.out.println("se Elimino  el curso");
-            }
-        }else {
-            return ResponseEntity.badRequest().body("Topico no encontrado o ya fue eliminado");
-        }
-
-        return ResponseEntity.ok("Tópico eliminado con éxito");
+       return ResponseEntity.ok(topicoService.eliminarTopico(id));
     }
 
 }
