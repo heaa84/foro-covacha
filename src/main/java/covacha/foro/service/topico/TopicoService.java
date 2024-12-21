@@ -5,11 +5,12 @@ import covacha.foro.domain.curso.CursoRepository;
 import covacha.foro.domain.respuesta.dto.DatosRespuesta;
 import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
-import covacha.foro.domain.topico.dto.DatosListadoTopico;
+import covacha.foro.domain.topico.dto.DatosTopico;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
 
 import covacha.foro.domain.usuario.Usuario;
-import covacha.foro.service.topico.validadores.InterfaceValid;
+import covacha.foro.service.topico.validadores.InterfaceValidRegistro;
+import covacha.foro.service.topico.validadores.InterfaceValidPorID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,10 @@ import java.util.List;
 public class TopicoService {
 
     @Autowired
-    private List<InterfaceValid> interfaceValidList;
+    private List<InterfaceValidRegistro> interfaceValidList;
+
+    @Autowired
+    private List<InterfaceValidPorID> interfaceValidPorIDS;
 
     @Autowired
     private TopicoRepository topicoRepository;
@@ -68,11 +72,28 @@ public class TopicoService {
                 ))
                 .toList();
 
-        var datosTopico = new DatosListadoTopico(topico);
+        var datosTopico = new DatosTopico(topico);
 
         // Construir la URI para el recurso recién creado
         URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
 
         return ResponseEntity.created(url).body(datosTopico);
+    }
+
+    public ResponseEntity<?> buscarTopicoID(long id){
+        interfaceValidPorIDS.forEach(v-> v.validar(id));
+
+        Topico topico=topicoRepository.getReferenceById(id);
+
+        var respuestas = topico.getRespuestas().stream()
+                .map(respuesta -> new DatosRespuesta(
+                        respuesta.getId(),
+                        respuesta.getMensaje(),
+                        respuesta.getFechaCreacion(),
+                        respuesta.getUsuarioQueRespondio()
+                ))
+                .toList();
+        var datosTopico= new DatosTopico(topico);
+        return ResponseEntity.ok(datosTopico);
     }
 }

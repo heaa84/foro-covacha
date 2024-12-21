@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidTopico implements InterfaceValid {
+public class ValidRegistro implements InterfaceValidRegistro {
 
     @Autowired
     TopicoRepository topicoRepository;

@@ -1,29 +1,22 @@
 package covacha.foro.controller;
 import covacha.foro.domain.curso.Curso;
 import covacha.foro.domain.curso.CursoRepository;
-
-
 import covacha.foro.domain.respuesta.dto.DatosRespuesta;
 import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
 import covacha.foro.domain.topico.dto.DatosActualizarTopico;
-import covacha.foro.domain.topico.dto.DatosListadoTopico;
+import covacha.foro.domain.topico.dto.DatosTopico;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
-
-
-
 import covacha.foro.service.topico.TopicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -69,12 +62,12 @@ public class TopicoController {
     @Operation(
             summary = "Obtiene la lista de tópicos",
             description = "Retorna todos los tópicos sin requerir parámetros de entrada")
-    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(
+    public ResponseEntity<Page<DatosTopico>> listadoTopicos(
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
 
             var topicos = topicoRepository.findAll(paginacion)
-                .map(DatosListadoTopico::new);
+                .map(DatosTopico::new);
         return ResponseEntity.ok(topicos);
     }
 
@@ -86,25 +79,7 @@ public class TopicoController {
             summary = "Obtener tópico por id",
             description = "Devuelve el tópico seleccionado por id ")
     public ResponseEntity <?> topicoPorId (@PathVariable Long id){
-        Optional <Topico> optionalTopico= topicoRepository.findById(id);
-        if (optionalTopico.isPresent()) {
-            Topico topico = optionalTopico.get();
-
-            // Mapear las respuestas del tópico a la lista de DatosRespuesta
-            var respuestas = topico.getRespuestas().stream()
-                    .map(respuesta -> new DatosRespuesta(
-                            respuesta.getId(),
-                            respuesta.getMensaje(),
-                            respuesta.getFechaCreacion(),
-                            respuesta.getUsuarioQueRespondio()
-                    ))
-                    .toList();
-
-            var datosTopico = new DatosListadoTopico(topico);
-
-            return ResponseEntity.ok(datosTopico);
-        }
-        return ResponseEntity.badRequest().body("Topico con existe Revisar id");
+            return ResponseEntity.badRequest().body("Topico con existe Revisar id");
     }
 
     // Actualizar tópico
@@ -155,7 +130,7 @@ public class TopicoController {
                     ))
                     .toList();
 
-            var datosTopico = new DatosListadoTopico(topico);
+            var datosTopico = new DatosTopico(topico);
             return ResponseEntity.ok(datosTopico);
         }
         return ResponseEntity.badRequest().body("Topico no entrontrado para actualizar");
