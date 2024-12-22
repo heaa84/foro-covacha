@@ -1,8 +1,4 @@
 package covacha.foro.controller;
-import covacha.foro.domain.curso.Curso;
-import covacha.foro.domain.curso.CursoRepository;
-import covacha.foro.domain.respuesta.dto.DatosRespuesta;
-import covacha.foro.domain.topico.Topico;
 import covacha.foro.domain.topico.TopicoRepository;
 import covacha.foro.domain.topico.dto.DatosActualizarTopico;
 import covacha.foro.domain.topico.dto.DatosTopico;
@@ -33,9 +29,6 @@ public class TopicoController {
 
     @Autowired
     private TopicoRepository topicoRepository;
-
-    @Autowired
-    private CursoRepository cursoRepository;
 
     @Autowired
     private TopicoService topicoService;
