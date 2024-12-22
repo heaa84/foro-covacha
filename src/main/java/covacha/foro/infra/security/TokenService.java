@@ -51,6 +51,6 @@ public class TokenService {
 
     // Método que genera la fecha y hora, de expiración del token
     public Instant generarFechaExpiracio(){
-        return LocalDateTime.now().plusHours(200).toInstant(ZoneOffset.of("-06:00")); // para producion cambiar a 2 horas
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-06:00")); // para producion cambiar a 2 horas
     }
 }
