@@ -2,7 +2,7 @@ package covacha.foro.service.usuario.validadores;
 
 import covacha.foro.domain.usuario.dto.DatosUsuario;
 import covacha.foro.service.ValidacionExcepcion;
-import covacha.foro.service.respuesta.validadores.InterfaceValid;
+import covacha.foro.service.usuario.validadores.InterfaceValid;
 import org.springframework.stereotype.Component;
 
 @Component
