@@ -1,10 +1,8 @@
 package covacha.foro.controller;
-import covacha.foro.domain.usuario.dto.DatosListadoUsuario;
-import covacha.foro.domain.usuario.Usuario;
+
 import covacha.foro.domain.usuario.UsuarioRepository;
 import covacha.foro.domain.usuario.dto.DatosUsuario;
-import covacha.foro.domain.usuario.dto.DatosRegistrarNuevoUsuario;
-import covacha.foro.infra.errores.TratadorDeErrores;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -16,9 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,10 +33,10 @@ public class UsuarioController {
     @Operation(
             summary = "Obtiene la lista de usuarios",
             description = "Retorna todos los usuarios sin requerir parámetros de entrada")
-    public ResponseEntity<Page<DatosListadoUsuario>> listadoUsuarios(
+    public ResponseEntity<Page<DatosUsuario>> listadoUsuarios(
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
-        return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosListadoUsuario::new));
+        return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosUsuario::new));
     }
 
     // Actualizar los Usuarios

@@ -1,6 +1,6 @@
 package covacha.foro.service.respuesta.validadores;
-import covacha.foro.domain.usuario.dto.DatosUsuario;
+import covacha.foro.domain.respuesta.dto.DatosRegistrarRespuesta;
 
 public interface InterfaceValid {
-    void validar(DatosUsuario datos);
+    void validar(DatosRegistrarRespuesta datos);
 }
