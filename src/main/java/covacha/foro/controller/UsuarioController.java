@@ -2,7 +2,7 @@ package covacha.foro.controller;
 import covacha.foro.domain.usuario.dto.DatosListadoUsuario;
 import covacha.foro.domain.usuario.Usuario;
 import covacha.foro.domain.usuario.UsuarioRepository;
-import covacha.foro.domain.usuario.dto.DatosActualizarUsuario;
+import covacha.foro.domain.usuario.dto.DatosUsuario;
 import covacha.foro.domain.usuario.dto.DatosRegistrarNuevoUsuario;
 import covacha.foro.infra.errores.TratadorDeErrores;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -52,16 +51,8 @@ public class UsuarioController {
     @Operation(
             summary = "Actualiza un usuario por ID",
             description = "Modifica los datos de un usuario, seleccionado por su id @PathVariable")
-    public ResponseEntity<?> actualizarUsuario (@PathVariable Long id, @RequestBody @Valid DatosActualizarUsuario datosActualizarUsuario){
-        Optional <Usuario> usuariobd=usuarioRepository.findById(id); // busca usuario en la BD por id, y lo guarda en Optional usuario
-        if (usuariobd.isPresent()){
-            Usuario usuario=usuarioRepository.getReferenceById(usuariobd.get().getId());
-            usuario.actualizarDatos(datosActualizarUsuario);
-        }else {
-            TratadorDeErrores errorResponse = new TratadorDeErrores("Usuario no existe");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-        return ResponseEntity.ok(datosActualizarUsuario);
+    public ResponseEntity<?> actualizarUsuario (@PathVariable Long id, @RequestBody @Valid DatosUsuario datosActualizarUsuario){
+        return ResponseEntity.ok(actualizarUsuario(id,datosActualizarUsuario));
     }
     // crear usuarios nuevo solo ADMMIN
     @PreAuthorize("hasRole('ADMIN')")
@@ -70,30 +61,8 @@ public class UsuarioController {
     @Operation(
             summary = "Registrar nuevo usuario",
             description = "Registra un usuario nuevo solo ADMIN")
-    public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Usuario autenticado: " + auth.getName());
-        System.out.println("Roles asignados: " + auth.getAuthorities());
-        String contrasenaBcryp="";
-        //verificar si existe el usuario ya en la BD
-        if (usuarioRepository.existsByNombre(datosRegistrarNuevoUsuario.nombre())){
-            TratadorDeErrores errorResponse =new TratadorDeErrores("Ya existe el usuario");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-        // encriptar contraseña
-        if (datosRegistrarNuevoUsuario.contrasena()!=null){
-            String contrasenaNueva = datosRegistrarNuevoUsuario.contrasena();
-            BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(10);
-            contrasenaBcryp=encoder.encode(contrasenaNueva);
-        }
-        //validar perfil
-        if(datosRegistrarNuevoUsuario.perfil()!=null){
-            if (!datosRegistrarNuevoUsuario.perfil().equals("ADMIN") && !datosRegistrarNuevoUsuario.perfil().equals("USER")){
-                TratadorDeErrores errorResponse =new TratadorDeErrores("Error al crear el perfil");
-                return ResponseEntity.badRequest().body(errorResponse);
-            }
-        }
-        Usuario usuario=usuarioRepository.save(new Usuario (datosRegistrarNuevoUsuario, contrasenaBcryp));
-        return ResponseEntity.ok(datosRegistrarNuevoUsuario);
+    public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosUsuario datosUsuario){
+
+        return ResponseEntity.ok(crearUsuario(datosUsuario));
     }
 }

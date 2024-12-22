@@ -1,6 +1,5 @@
 package covacha.foro.domain.usuario;
-import covacha.foro.domain.usuario.dto.DatosActualizarUsuario;
-import covacha.foro.domain.usuario.dto.DatosRegistrarNuevoUsuario;
+import covacha.foro.domain.usuario.dto.DatosUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -31,13 +30,13 @@ public class Usuario implements UserDetails {
     private String contrasena;
     private String perfil;
 
-    public Usuario(@Valid DatosRegistrarNuevoUsuario datosRegistrarNuevoUsuario, String contrasenaBcryp) {
-    this.nombre = datosRegistrarNuevoUsuario.nombre();
-    this.correo_electronico = datosRegistrarNuevoUsuario.correo_electronico();
+    public Usuario(@Valid DatosUsuario datos, String contrasenaBcryp) {
+    this.nombre = datos.nombre();
+    this.correo_electronico = datos.correo_electronico();
 
 
     this.contrasena = contrasenaBcryp;
-    this.perfil = datosRegistrarNuevoUsuario.perfil();
+    this.perfil = datos.perfil();
     }
 
     @Override
@@ -82,7 +81,7 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-    public void actualizarDatos(DatosActualizarUsuario datosActualizarUsuario) {
+    public void actualizarDatos(DatosUsuario datosActualizarUsuario) {
     if (datosActualizarUsuario.nombre()!=null){
         this.nombre= datosActualizarUsuario.nombre();
     }

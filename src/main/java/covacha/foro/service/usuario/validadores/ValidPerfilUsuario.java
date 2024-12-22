@@ -6,11 +6,11 @@ import covacha.foro.service.respuesta.validadores.InterfaceValid;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidNombreUsuario implements InterfaceValid {
+public class ValidPerfilUsuario implements InterfaceValid {
     @Override
     public void validar(DatosUsuario datos) {
-        if(datos.nombre().length()<4){
-            throw new ValidacionExcepcion("Error mensaje muy corto o nulo");
+        if(datos.contrasena()!="ADMIN" && datos.contrasena()!="USER"){
+            throw new ValidacionExcepcion("Error en el campo de Perfil");
         }
     }
 }

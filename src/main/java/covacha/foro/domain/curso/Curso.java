@@ -4,7 +4,6 @@ package covacha.foro.domain.curso;
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
 import covacha.foro.domain.topico.Topico;
-import covacha.foro.domain.usuario.dto.DatosActualizarUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
