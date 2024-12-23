@@ -100,7 +100,7 @@ public class TopicoService {
         Topico topico = topicoRepository.getReferenceById(id);
         Curso curso= topico.getCurso();
         curso.getTopicos().remove(topico);
-        if (curso.getTopicos().size()<1){
+        if (curso.getTopicos().isEmpty()){
             cursoRepository.delete(curso);
         }
     }
