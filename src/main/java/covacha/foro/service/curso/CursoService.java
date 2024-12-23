@@ -35,6 +35,6 @@ public class CursoService {
     }
 
     public Page<Curso.DatosListadoCursos> listarCursos(Pageable paginacion) {
-        return cursoRepository.findAll(paginacion).map(Curso.DatosListadoCursos::new);
+        return cursoRepository.findAll(paginacion).map(DatosRepuestaCurso::new);
     }
 }

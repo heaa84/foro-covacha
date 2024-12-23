@@ -11,6 +11,8 @@ import covacha.foro.service.topico.validadores.InterfaceValidRegistro;
 import covacha.foro.service.topico.validadores.InterfaceValidPorID;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -138,5 +140,9 @@ public class TopicoService {
             return ResponseEntity.badRequest().body("Topico no encontrado o ya fue eliminado");
         }
         return ResponseEntity.ok("Tópico eliminado con éxito");
+    }
+
+    public Page<DatosTopico> listaTopico(Pageable paginacion) {
+        return topicoRepository.findAll(paginacion).map(DatosTopico::new);
     }
 }

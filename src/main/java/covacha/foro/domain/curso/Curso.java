@@ -28,8 +28,8 @@ public class Curso {
 
     private String categoria;
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL , orphanRemoval = true, fetch = FetchType.EAGER)
-    private List <Topico> topicos;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Topico> topicos;
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -50,23 +50,10 @@ public class Curso {
 
     public void actualizarDatos(DatosActualizarCurso datos) {
         if (nombre != null) {
-            this.nombre =datos.nombre();
+            this.nombre = datos.nombre();
         }
         if (categoria != null) {
             this.categoria = datos.categoria();
-        }
-    }
-
-    public static record DatosListadoCursos(
-            Long id,
-            String nombre,
-            String categoria
-
-    ) {
-        // Constructor
-
-        public DatosListadoCursos(Curso curso) {
-            this(curso.getId(), curso.getNombre(), curso.getCategoria());
         }
     }
 }

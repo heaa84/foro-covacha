@@ -58,9 +58,7 @@ public class TopicoController {
     public ResponseEntity<Page<DatosTopico>> listadoTopicos(
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
-            var topicos = topicoRepository.findAll(paginacion)
-                .map(DatosTopico::new);
-        return ResponseEntity.ok(topicos);
+        return ResponseEntity.ok(topicoService.listaTopico(paginacion));
     }
 
     //Topico por ID
