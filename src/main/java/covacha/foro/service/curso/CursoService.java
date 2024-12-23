@@ -7,6 +7,8 @@ import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
 
 import covacha.foro.service.curso.validadores.InterfaceValid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +32,9 @@ public class CursoService {
         curso.actualizarDatos(datos);
         var datosCurso= new DatosRepuestaCurso(id,datos.nombre(), datos.categoria());
         return ResponseEntity.ok(datosCurso);
+    }
+
+    public Page<Curso.DatosListadoCursos> listarCursos(Pageable paginacion) {
+        return cursoRepository.findAll(paginacion).map(Curso.DatosListadoCursos::new);
     }
 }

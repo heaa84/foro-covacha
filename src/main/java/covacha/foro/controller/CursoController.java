@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class CursoController {
 
     @Autowired
-    private CursoRepository cursoRepository;
-    @Autowired
     private CursoService cursoService;
-
 
     // Listar todos los Cursos
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
@@ -38,7 +35,7 @@ public class CursoController {
     public ResponseEntity<Page<Curso.DatosListadoCursos>> listadoTopicos(
             @Parameter(hidden = true)
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
-        return ResponseEntity.ok(cursoRepository.findAll(paginacion).map(Curso.DatosListadoCursos::new));
+        return ResponseEntity.ok(cursoService.listarCursos(paginacion));
     }
 
     // Actualizar tópico
@@ -48,7 +45,7 @@ public class CursoController {
     @Operation(
             summary = "Actualiza curso",
             description = "Solo ADMIN puede actualizar cursos de la BD")
-    public ResponseEntity  actualizarCurso (@PathVariable Long id,@RequestBody @Valid DatosActualizarCurso datosActualizarCurso){
+    public ResponseEntity <?> actualizarCurso (@PathVariable Long id,@RequestBody @Valid DatosActualizarCurso datosActualizarCurso){
         return ResponseEntity.ok(cursoService.actualizarCurso(id, datosActualizarCurso));
     }
 
