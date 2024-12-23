@@ -1,9 +1,7 @@
 package covacha.foro.controller;
 
-
-import covacha.foro.domain.curso.Curso;
-
 import covacha.foro.domain.curso.dto.DatosActualizarCurso;
+import covacha.foro.domain.curso.dto.DatosRepuestaCurso;
 import covacha.foro.service.curso.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +30,7 @@ public class CursoController {
     @Operation(
             summary = "Obtiene la lista de Cursos",
             description = "Retorna todos los cursos de la BD")
-    public ResponseEntity<Page<Curso.DatosListadoCursos>> listadoTopicos(
+    public ResponseEntity<Page<DatosRepuestaCurso>> listadoTopicos(
             @Parameter(hidden = true)
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(cursoService.listarCursos(paginacion));

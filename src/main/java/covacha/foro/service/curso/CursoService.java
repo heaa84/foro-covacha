@@ -25,17 +25,16 @@ public class CursoService {
     private List<InterfaceValid> validadorCursos;
 
 
-    public ResponseEntity<?> actualizarCurso(Long id, DatosActualizarCurso datos){
+    public Page<DatosRepuestaCurso> listarCursos(Pageable paginacion) {
+        return cursoRepository.findAll(paginacion).map(DatosRepuestaCurso::new);
+    }
+
+    public DatosRepuestaCurso actualizarCurso(Long id, DatosActualizarCurso datos){
         // Validadores
         validadorCursos.forEach(v-> v.validar(datos));
 
         Curso curso=cursoRepository.getReferenceById(id);
         curso.actualizarDatos(datos);
-        var datosCurso= new DatosRepuestaCurso(id,datos.nombre(), datos.categoria());
-        return ResponseEntity.ok(datosCurso);
-    }
-
-    public Page<DatosRepuestaCurso> listarCursos(Pageable paginacion) {
-        return cursoRepository.findAll(paginacion).map(DatosRepuestaCurso::new);
+        return new DatosRepuestaCurso(id,datos.nombre(), datos.categoria());
     }
 }
