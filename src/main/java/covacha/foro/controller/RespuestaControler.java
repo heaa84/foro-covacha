@@ -1,6 +1,7 @@
 package covacha.foro.controller;
 
 
+import covacha.foro.domain.respuesta.Respuesta;
 import covacha.foro.domain.respuesta.dto.DatosRegistrarRespuesta;
 import covacha.foro.service.respuesta.RespuestaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 
 @RestController
@@ -30,7 +33,9 @@ public class RespuestaControler {
             summary = "Agregar respuesta",
             description = "Agregar una respuesta al topico"
     )
-    public ResponseEntity<?> agregarResouesta(@RequestBody @Valid DatosRegistrarRespuesta datosRegistrarRespuesta){
-        return ResponseEntity.ok(respuestaService.agregarRespuesta(datosRegistrarRespuesta));
+    public ResponseEntity<?> agregarRespuesta(@RequestBody @Valid DatosRegistrarRespuesta datos) {
+        Respuesta respuesta = respuestaService.agregarRespuesta(datos);
+        URI url = URI.create("/respuesta/" + respuesta.getId());
+        return ResponseEntity.created(url).body(respuesta);
     }
 }
