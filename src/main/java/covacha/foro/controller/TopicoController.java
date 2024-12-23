@@ -61,7 +61,7 @@ public class TopicoController {
         return ResponseEntity.ok(topicoService.listaTopico(paginacion));
     }
 
-    //Topico por ID
+    // Tópico por ID
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/{id}")
     @Transactional
@@ -79,8 +79,8 @@ public class TopicoController {
     @Operation(
             summary = "Actualizar tópico",
             description = "Solo ADMIN puede actualizar un tópico")
-    public ResponseEntity<?>  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
-        return ResponseEntity.ok(topicoService.actualizarTopico(id, datosActualizarTopico));
+    public ResponseEntity<?>  actualizarTopico (@PathVariable Long id,@RequestBody @Valid DatosActualizarTopico datosActualizarTopico,  Authentication authentication){
+        return ResponseEntity.ok(topicoService.actualizarTopico(id, datosActualizarTopico, authentication));
     }
 
     // Eliminar Topico de la BD
@@ -91,7 +91,7 @@ public class TopicoController {
             summary = "Eliminar tópico",
             description = "Solo un ADMIN puede eliminar un tópico")
     public ResponseEntity<?> eliminarTopico(@PathVariable Long id) {
-       return ResponseEntity.ok(topicoService.eliminarTopico(id));
+       return ResponseEntity.ok("Topico eliminado");
     }
 
 }

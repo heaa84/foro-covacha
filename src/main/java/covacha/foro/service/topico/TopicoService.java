@@ -73,73 +73,36 @@ public class TopicoService {
         return ResponseEntity.created(url).body(datosTopico);
     }
 
-    public ResponseEntity<?> buscarTopicoID(long id) {
+    public DatosTopico buscarTopicoID(long id) {
         interfaceValidPorIDS.forEach(v -> v.validar(id));
-
         Topico topico = topicoRepository.getReferenceById(id);
-
-        var datosTopico = new DatosTopico(topico);
-        return ResponseEntity.ok(datosTopico);
+        return new DatosTopico(topico);
     }
 
-    public ResponseEntity<?> actualizarTopico(Long id, DatosActualizarTopico datos) {
+    public DatosActualizarTopico actualizarTopico(Long id, DatosActualizarTopico datos, Authentication authentication) {
         interfaceValidPorIDS.forEach(v -> v.validar(id));
-
-        Optional<Topico> optionalTopico = topicoRepository.findById(id);
-        if (optionalTopico.isPresent()) {
-            Topico topico = topicoRepository.getReferenceById(id); // obtener datos del topico, que esta en BD y guardarlos en topico
-            topico.actualizarDatos(datos); // enviar datos que queremos actualizar al metodo actualizarDatos
-        /* Actualizar Curso. Importante no actualizar directamente el curso sino crear una
-        instancia de curso nueva, para posteriormene acignarcela al topico
-         */
-            // Verificar si hay datos para actualizar en el curso
-            if (datos.nombre() != null || datos.categoria() != null) {
-                // Obtener los datos del curso actual del topico
-                String nombre = (datos.nombre() != null ? datos.nombre() : topico.getCurso().getNombre());
-                String categoria = (datos.categoria() != null ? datos.categoria() : topico.getCurso().getCategoria());
-
-                // Verificar si ya existe un Curso con los mismos datos
-                var cursoExistente = cursoRepository.findByNombreAndCategoria(nombre, categoria);
-
-                if (cursoExistente.isPresent()) {// Si hay un curso existenete
-                    // Asignar el curso existente al topico
-                    topico.setCurso(cursoExistente.get());
-                } else {
-                    // si no hay curso exitente crear un curso y asignar topico al curso
-                    Curso nuevoCurso = new Curso();
-                    nuevoCurso.setNombre(nombre);
-                    nuevoCurso.setCategoria(categoria);
-                    // Guardar el nuevo curso en BD
-                    cursoRepository.save(nuevoCurso);
-                    // Asignar El nuevo curso al topico
-                    topico.setCurso(nuevoCurso);
-                }
-            }
-
-            var datosTopico = new DatosTopico(topico);
-            return ResponseEntity.ok(datosTopico);
-        }
-        return ResponseEntity.badRequest().body("Topico no entrontrado para actualizar");
+        // obtención de datos
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        Topico topico= topicoRepository.getReferenceById(id);
+        topico.actualizarDatos(datos);
+        topico.setAutor(usuario.getNombre());
+        return  new DatosActualizarTopico(topico.getTitulo(), topico.getMensaje());
     }
 
-    public ResponseEntity<?> eliminarTopico(Long id) {
-        // Buscar el tópico a eliminar
-        Optional<Topico> optionalTopico = topicoRepository.findById(id);
-        if (optionalTopico.isPresent()) {
-            Topico topico = optionalTopico.get();
-            // Obtener el curso asociado
-            Curso curso = topico.getCurso();
-            // Remover el tópico de la lista del curso
-            curso.getTopicos().remove(topico);
-            System.out.println("Numero de topicos: " + curso.getTopicos().size());
-            if (curso.getTopicos().size() < 1) {
-                cursoRepository.delete(curso);
-                System.out.println("se Elimino  el curso");
-            }
-        } else {
-            return ResponseEntity.badRequest().body("Topico no encontrado o ya fue eliminado");
+    public void eliminarTopico(Long id) {
+        interfaceValidPorIDS.forEach(v -> v.validar(id));
+        /*
+        1- obtenemos el tópico
+        2- obtenemos el curso que contiene el tópico a eliminar
+        3- eliminamos el tópico
+        4- si el Curso ya no tiene tópicos tambien lo eliminamos
+        */
+        Topico topico = topicoRepository.getReferenceById(id);
+        Curso curso= topico.getCurso();
+        curso.getTopicos().remove(topico);
+        if (curso.getTopicos().size()<1){
+            cursoRepository.delete(curso);
         }
-        return ResponseEntity.ok("Tópico eliminado con éxito");
     }
 
     public Page<DatosTopico> listaTopico(Pageable paginacion) {

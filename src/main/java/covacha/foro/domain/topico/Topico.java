@@ -65,10 +65,6 @@ public class Topico {
         if (datosActualizarTopico.mensaje() != null) {
             this.mensaje = datosActualizarTopico.mensaje();
         }
-        if (datosActualizarTopico.autor() != null) {
-            this.autor = datosActualizarTopico.autor();
-        }
-
     }
 
     //Métodos para respuesta

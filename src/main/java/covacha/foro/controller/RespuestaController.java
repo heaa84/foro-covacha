@@ -22,7 +22,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/respuesta")
 @SecurityRequirement(name = "bearer-key")
-public class RespuestaControler {
+public class RespuestaController {
     @Autowired
     private RespuestaService respuestaService;
 
