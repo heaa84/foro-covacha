@@ -3,6 +3,7 @@ package covacha.foro.controller;
 import covacha.foro.domain.usuario.UsuarioRepository;
 import covacha.foro.domain.usuario.dto.DatosUsuario;
 
+import covacha.foro.service.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -24,8 +25,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
-
+    @Autowired
+    private UsuarioService usuarioService;
     // Listar todos los Usuarios
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
@@ -36,7 +37,7 @@ public class UsuarioController {
     public ResponseEntity<Page<DatosUsuario>> listadoUsuarios(
             @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
-        return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(DatosUsuario::new));
+        return ResponseEntity.ok(usuarioService.listaUsuarios(paginacion));
     }
 
     // Actualizar los Usuarios
@@ -48,7 +49,7 @@ public class UsuarioController {
             summary = "Actualiza un usuario por ID",
             description = "Modifica los datos de un usuario, seleccionado por su id @PathVariable")
     public ResponseEntity<?> actualizarUsuario (@PathVariable Long id, @RequestBody @Valid DatosUsuario datosActualizarUsuario){
-        return ResponseEntity.ok(actualizarUsuario(id,datosActualizarUsuario));
+        return usuarioService.actualizarUsuario(id,datosActualizarUsuario);
     }
     // crear usuarios nuevo solo ADMMIN
     @PreAuthorize("hasRole('ADMIN')")
@@ -59,6 +60,6 @@ public class UsuarioController {
             description = "Registra un usuario nuevo solo ADMIN")
     public ResponseEntity<?> crearUsuario(@RequestBody @Valid DatosUsuario datosUsuario){
 
-        return ResponseEntity.ok(crearUsuario(datosUsuario));
+        return ResponseEntity.ok(usuarioService.crearUsuario(datosUsuario));
     }
 }
