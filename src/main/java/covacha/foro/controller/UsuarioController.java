@@ -1,6 +1,4 @@
 package covacha.foro.controller;
-
-import covacha.foro.domain.usuario.UsuarioRepository;
 import covacha.foro.domain.usuario.dto.DatosUsuario;
 
 import covacha.foro.service.usuario.UsuarioService;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearer-key")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
     @Autowired
     private UsuarioService usuarioService;
     // Listar todos los Usuarios

@@ -27,12 +27,8 @@ public class CursoController {
     // Listar todos los Cursos
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
-    @Operation(
-            summary = "Obtiene la lista de Cursos",
-            description = "Retorna todos los cursos de la BD")
-    public ResponseEntity<Page<DatosRepuestaCurso>> listadoTopicos(
-            @Parameter(hidden = true)
-            @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
+    @Operation(summary = "Obtiene la lista de Cursos",description = "Retorna todos los cursos de la BD")
+    public ResponseEntity<Page<DatosRepuestaCurso>> listadoTopicos(@Parameter(hidden = true)@PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(cursoService.listarCursos(paginacion));
     }
 
@@ -40,9 +36,7 @@ public class CursoController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Transactional
-    @Operation(
-            summary = "Actualiza curso",
-            description = "Solo ADMIN puede actualizar cursos de la BD")
+    @Operation(summary = "Actualiza curso",description = "Solo ADMIN puede actualizar cursos de la BD")
     public ResponseEntity <?> actualizarCurso (@PathVariable Long id,@RequestBody @Valid DatosActualizarCurso datosActualizarCurso){
         return ResponseEntity.ok(cursoService.actualizarCurso(id, datosActualizarCurso));
     }

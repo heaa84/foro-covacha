@@ -1,5 +1,5 @@
 package covacha.foro.controller;
-import covacha.foro.domain.topico.TopicoRepository;
+
 import covacha.foro.domain.topico.dto.DatosActualizarTopico;
 import covacha.foro.domain.topico.dto.DatosTopico;
 import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
@@ -19,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Optional;
 
 
 @RestController
@@ -28,12 +27,7 @@ import java.util.Optional;
 public class TopicoController {
 
     @Autowired
-    private TopicoRepository topicoRepository;
-
-    @Autowired
     private TopicoService topicoService;
-
-
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping
