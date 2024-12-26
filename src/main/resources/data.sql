@@ -77,3 +77,42 @@ VALUES
 UPDATE topicos
 SET status = 'RESUELTO'
 WHERE id IN(1,10);
+
+-- Insertar más usuarios
+INSERT INTO usuarios (nombre, correo_electronico, contrasena, perfil)
+VALUES
+('maria', 'maria@covacha.com', '$2a$10$F4.x0y8M7Kt6jLbP4wGVieI1oFD9o3Vm.tl/oxK1xYFY/RI4f5gA.', 'USER'),
+('juan', 'juan@covacha.com', '$2a$10$G9/mFJ3fLoSKEI0hPVlhNuIwBq/pCpM0ERaHpJ/rZhoEqJAkLW2ZC', 'USER'),
+('ana', 'ana@covacha.com', '$2a$10$8Q5O.2EpmSD.nZEBHQF4SeLJeoF8FpHrVRuWhrVFA/FR6fX68B1MG', 'USER');
+
+-- Insertar más cursos
+INSERT INTO cursos (nombre, categoria)
+VALUES
+('Programación Orientada a Objetos', 'JAVA'),
+('Estructuras de Datos', 'PYTHON'),
+('Fundamentos de Frontend', 'JAVASCRIPT');
+
+-- Insertar más tópicos
+INSERT INTO topicos (titulo, mensaje, status, autor, curso_id)
+VALUES
+('Uso de Arrays', '¿Cómo declarar y usar arrays en Java?', 'ACTIVO', 'maria', 1),
+('Manipular Strings', '¿Cuáles son los métodos útiles para manipular strings en Python?', 'ACTIVO', 'juan', 2),
+('Crear una página básica', '¿Cómo crear una página HTML básica con JavaScript?', 'ACTIVO', 'ana', 3),
+('Colecciones en Java', '¿Qué son las colecciones en Java y cómo se usan?', 'ACTIVO', 'maria', 1),
+('Listas en Python', '¿Cómo crear y manipular listas en Python?', 'ACTIVO', 'juan', 2),
+('Eventos en JavaScript', '¿Qué son los eventos en JavaScript y cómo funcionan?', 'ACTIVO', 'ana', 3);
+
+-- Insertar más respuestas
+INSERT INTO respuestas (mensaje, usuario_que_respondio, topico_id)
+VALUES
+('Puedes declarar arrays usando: int[] array = {1, 2, 3};', 'maria', 13),
+('Usa el método .lower() para convertir un string a minúsculas.', 'juan', 14),
+('Crea una página básica con: <html><body>Hola Mundo</body></html>', 'ana', 15),
+('Revisa la interfaz Collection y sus subclases como ArrayList y HashSet.', 'maria', 16),
+('Puedes añadir elementos a una lista con .append().', 'juan', 17),
+('Los eventos se manejan con addEventListener.', 'ana', 18);
+
+-- Actualizar estados de tópicos resueltos
+UPDATE topicos
+SET status = 'RESUELTO'
+WHERE id IN (13, 14, 15);
