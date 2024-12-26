@@ -17,4 +17,5 @@ FROM openjdk:17-jdk-slim
 COPY --from=builder /app/target/foro-covacha.jar /app/foro-covacha.jar
 
 # Ejecutar la aplicación
+EXPOSE 8080
 CMD ["java", "-jar", "/app/foro-covacha.jar"]
