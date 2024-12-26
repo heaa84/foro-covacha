@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Ejecutar el comando de Maven para construir el proyecto
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Imagen final con el archivo JAR
 FROM openjdk:17-jdk-slim
