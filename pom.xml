@@ -8,10 +8,10 @@
 		<version>3.3.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>cobacha.foro.cobacha</groupId>
+	<groupId>covacha.foro.covacha</groupId>
 	<artifactId>foro-covacha</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>foro-cobacha</name>
+	<name>foro-covacha</name>
 	<description>API REST foro cobaca con java y sping boot</description>
 	<url/>
 	<licenses>
