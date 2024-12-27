@@ -34,8 +34,12 @@ public class RespuestaController {
             description = "Agregar una respuesta al topico"
     )
     public ResponseEntity<?> agregarRespuesta(@RequestBody @Valid DatosRegistrarRespuesta datos) {
-        Respuesta respuesta = respuestaService.agregarRespuesta(datos);
-        URI url = URI.create("/respuesta/" + respuesta.getId());
-        return ResponseEntity.created(url).body(respuesta);
+        try{
+            Respuesta respuesta = respuestaService.agregarRespuesta(datos);
+            URI url = URI.create("/respuesta/" + respuesta.getId());
+            return ResponseEntity.created(url).body(respuesta);
+        } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage()); // O un objeto de error más elaborado
+    }
     }
 }
