@@ -9,20 +9,18 @@ import covacha.foro.domain.topico.dto.DatosRegistroTopicoConCurso;
 import covacha.foro.domain.usuario.Usuario;
 import covacha.foro.service.topico.validadores.InterfaceValidRegistro;
 import covacha.foro.service.topico.validadores.InterfaceValidPorID;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class TopicoService {
@@ -62,6 +60,7 @@ public class TopicoService {
         Topico topico = new Topico(datos);
         topico.setCurso(curso); // Asociar el curso al topico
         topico.setAutor(usuario.getNombre()); // Asociar El usuario al Autor
+        topico.setFechaCreacion(LocalDateTime.now());
 
         // Guardar el tópico
         topicoRepository.save(topico);

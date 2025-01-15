@@ -35,7 +35,7 @@ public class TopicoController {
     @Operation(
             summary = "Registra un tópico",
             description = "Registramos un tópico")
-    public ResponseEntity registrarTopicoConCurso(
+    public ResponseEntity  registrarTopicoConCurso(
             @RequestBody @Valid DatosRegistroTopicoConCurso datosRegistroTopicoConCurso,
             UriComponentsBuilder uriComponentsBuilder,
             Authentication authentication) {
@@ -47,10 +47,10 @@ public class TopicoController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping
     @Operation(
-            summary = "Obtiene la lista de tópicos",
-            description = "Retorna todos los tópicos sin requerir parámetros de entrada")
+            summary = "Ver tópicos",
+            description = "Ver listado de tópicos")
     public ResponseEntity<Page<DatosTopico>> listadoTopicos(
-            @Parameter(hidden = true) // Ocultar parámetros para evitar que swagger los pida
+            @Parameter(example ="{\"page\":0, \"size\":10 , \"sort\":\"fechaCreacion,desc\"}") // Ocultar parámetros para evitar que swagger los pida
             @PageableDefault(size = 10 , sort = "id") Pageable paginacion) {
         return ResponseEntity.ok(topicoService.listaTopico(paginacion));
     }

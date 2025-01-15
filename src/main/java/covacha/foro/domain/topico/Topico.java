@@ -32,9 +32,8 @@ public class Topico {
     @NotBlank
     private String mensaje;
     private String autor;
-
-    private LocalDateTime fechaCreacion = LocalDateTime.now(); // Se asigna la fecha actual por defecto
-
+    @Column(name = "fecha_creacion")
+    private LocalDateTime fechaCreacion; // Se asigna la fecha actual por defecto
     @NotNull
     @Enumerated(EnumType.STRING)
     private TopicoStatus status;
